@@ -11,7 +11,7 @@ namespace GoReal.Models.Services.Extensions
         internal static User ToUser(this IDataRecord Dr)
         {
             return new User() { 
-                UserId = (int)Dr["Id"],
+                UserId = (int)Dr["UserId"],
                 GoTag = (string)Dr["GoTag"],
                 LastName = (string)Dr["LastName"],
                 FirstName = (string)Dr["FirstName"],

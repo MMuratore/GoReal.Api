@@ -14,9 +14,9 @@ namespace GoReal.Models.Services
     {
         private Connection _connection;
 
-        public AuthRepository()
+        public AuthRepository(string connectionString)
         {
-            _connection = new Connection(new ConnectionInfo("Data Source = MURAKS; Initial Catalog = Library; Integrated Security = True;"), SqlClientFactory.Instance);
+            _connection = new Connection(new ConnectionInfo(connectionString), SqlClientFactory.Instance);
         }
 
         public User Login(string login, string password)
