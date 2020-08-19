@@ -4,5 +4,12 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Tools.Security.Token\Tools.Security.Token.csproj" />
+    <ProjectReference Include="..\GoReal.Common.Interfaces\GoReal.Common.Interfaces.csproj" />
+    <ProjectReference Include="..\GoReal.Models.Api\GoReal.Models.Api.csproj" />
+    <ProjectReference Include="..\GoReal.Models.Services\GoReal.Models.Services.csproj" />
+  </ItemGroup>
+
 
 </Project>
