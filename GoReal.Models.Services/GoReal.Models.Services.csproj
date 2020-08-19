@@ -4,4 +4,14 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Tools.Databases\Tools.Databases.csproj" />
+    <ProjectReference Include="..\GoReal.Common.Interfaces\GoReal.Common.Interfaces.csproj" />
+    <ProjectReference Include="..\GoReal.Models.Entities\GoReal.Models.Entities.csproj" />
+  </ItemGroup>
+
 </Project>
