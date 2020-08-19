@@ -9,4 +9,6 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
-INSERT INTO [User] VALUES ('Muratore', 'Matthieu', 'matthieu.muratore@gmail.com', HASHBYTES ( 'SHA2_512', dbo.GetPreSalt() + 'Test123+' + dbo.GetPostSalt()));
+EXECUTE [dbo].[Register]  @GoTag = 'MuRakSss', @LastName = 'Muratore', @FirstName = 'Matthieu', 
+    @Email = 'matthieu.muratore@gmail.com' , @Password = 'Test1234+';
+UPDATE [dbo].[User] SET [isAdmin] = 1 WHERE [GoTag] = 'MuRakSss';

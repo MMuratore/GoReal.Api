@@ -1,6 +1,0 @@
-﻿CREATE PROCEDURE [dbo].[HeroDelete]
-	@Id INT
-AS
-BEGIN
-	DELETE FROM [Hero] WHERE Id=@Id
-END
