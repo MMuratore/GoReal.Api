@@ -65,7 +65,6 @@
     <Build Include="Functions\GetPostSalt.sql" />
     <Build Include="Functions\GetPreSalt.sql" />
     <Build Include="Tables\User.sql" />
-    <Build Include="Tables\UserRanking.sql" />
     <Build Include="Procedures\User\Login.sql" />
     <Build Include="Procedures\User\Register.sql" />
   </ItemGroup>

@@ -5,7 +5,6 @@
     [LastName] NVARCHAR(320) NULL, 
     [FirstName] NVARCHAR(320) NULL, 
     [Email] NVARCHAR(320) NOT NULL, 
-    [Ranking] INT NOT NULL DEFAULT 500,
     [Password] BINARY(64) NOT NULL, 
     [isAdmin] BIT NOT NULL DEFAULT 0, 
     [isActive] BIT NOT NULL DEFAULT 1, 
