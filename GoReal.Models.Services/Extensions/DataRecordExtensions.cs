@@ -16,7 +16,6 @@ namespace GoReal.Models.Services.Extensions
                 LastName = (string)Dr["LastName"],
                 FirstName = (string)Dr["FirstName"],
                 Email = (string)Dr["Email"],
-                Ranking = (int)Dr["Ranking"],
                 isAdmin = (bool)Dr["isAdmin"],
                 isActive = (bool)Dr["isActive"],
             };
