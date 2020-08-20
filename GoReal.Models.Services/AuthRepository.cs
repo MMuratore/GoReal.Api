@@ -1,4 +1,5 @@
 ﻿using GoReal.Common.Interfaces;
+using GoReal.Common.Interfaces.Enumerations;
 using GoReal.Models.Entities;
 using GoReal.Models.Services.Extensions;
 using System;
@@ -28,7 +29,7 @@ namespace GoReal.Models.Services
             return _connection.ExecuteReader(cmd, (dr) => dr.ToUser()).SingleOrDefault();
         }
 
-        public bool Register(User user)
+        public UserResult Register(User user)
         {
             Command cmd = new Command("Register", true);
             cmd.AddParameter("GoTag", user.GoTag);
@@ -36,7 +37,16 @@ namespace GoReal.Models.Services
             cmd.AddParameter("FirstName", user.FirstName);
             cmd.AddParameter("Email", user.Email);
             cmd.AddParameter("Password", user.Password);
-            return _connection.ExecuteNonQuery(cmd) == 1;
+            try
+            {
+                _connection.ExecuteNonQuery(cmd);
+            }
+            catch (Exception e)
+            {
+                if(e.Message.Contains("UK_User_GoTag")) return UserResult.GoTagNotUnique;
+                if(e.Message.Contains("UK_User_Email")) return UserResult.EmailNotUnique;
+            }
+            return UserResult.Register;
         }
     }
 }

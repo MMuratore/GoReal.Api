@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using GoReal.Models.Services;
 using GoReal.Models.Api.Mappers;
+using GoReal.Common.Interfaces.Enumerations;
 
 namespace GoReal.Models.Api.Services
 {
@@ -22,7 +23,7 @@ namespace GoReal.Models.Api.Services
             return _globalRepository.Login(login, password)?.ToClient();
         }
 
-        public bool Register(User user)
+        public UserResult Register(User user)
         {
             return _globalRepository.Register(user.ToDal());
         }
