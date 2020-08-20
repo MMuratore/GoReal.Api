@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web.Http.Results;
+using GoReal.Api.Infrastrucutre;
 using GoReal.Common.Interfaces;
+using GoReal.Common.Interfaces.Enumerations;
 using GoReal.Models.Api;
 using GoReal.Models.Api.Services;
 using Microsoft.AspNetCore.Http;
@@ -31,40 +35,26 @@ namespace GoReal.Api.Controllers
         {
             User user = _authService.Login(form.Email, form.Password);
             if (user is null) return NotFound();
-            {
-                user.Token = _tokenService.EncodeToken(user, user => new Claim[] { 
-                    new Claim("UserId", user.UserId.ToString()),
-                    new Claim("GoTag", user.GoTag),
-                    new Claim("LastName", user.LastName), 
-                    new Claim("FirstName", user.FirstName), 
-                    new Claim("Email", user.Email) });
 
-                return Ok(user);
-            }
-            /*
-            [HttpPost]
-            [Route("loginAsync")]
-            public async Task<IActionResult> loginAsync([FromBody] LoginForm form)
-            {
-                User user = await _authService.Login(form.Login, form.Password);
+            user.Token = _tokenService.EncodeToken(user, user => new Claim[] { 
+                new Claim("UserId", user.UserId.ToString()),
+                new Claim("GoTag", user.GoTag),
+                new Claim("LastName", user.LastName), 
+                new Claim("FirstName", user.FirstName), 
+                new Claim("Email", user.Email) });
 
-                if (!(user is null))
-                {
-                    user.Token = _tokenService.EncodeToken(user, user => new Claim[] { new Claim("Id", user.Id.ToString()), new Claim("LastName", user.LastName), new Claim("FirstName", user.FirstName), new Claim("Email", user.Email) });
-                    user.Addresses = _addressService.GetByUserId(user.Id);
-                }
-
-                return Ok(user);
-            }
-            */
-
+            return Ok(user);
         }
 
         [HttpPost]
         [Route("register")]
         public IActionResult Register([FromBody] User user)
         {
-            if (_authService.Register(user)) return Ok();
+            UserResult userResult = _authService.Register(user);
+            if (userResult == UserResult.Register) return Ok();
+            else if (userResult == UserResult.GoTagNotUnique) return Problem("GoTag already use", statusCode: (int)HttpStatusCode.Forbidden);
+            else if (userResult == UserResult.EmailNotUnique) return Problem("Email already use", statusCode: (int)HttpStatusCode.Forbidden);
+
             return NotFound();
         }
     }
