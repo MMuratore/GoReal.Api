@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GoReal.Api.Configuration;
+using GoReal.Api.Infrastrucutre.Configuration;
 using GoReal.Common.Interfaces;
 using GoReal.Models.Api;
 using GoReal.Models.Api.Services;
