@@ -15,5 +15,5 @@ EXECUTE [dbo].[CreateRole]  @RoleName = 'Player';
 EXECUTE [dbo].[Register]  @GoTag = 'MuRakSss', @LastName = 'Muratore', @FirstName = 'Matthieu', 
     @Email = 'matthieu.muratore@gmail.com' , @Password = 'Test1234+';
 
-EXECUTE [dbo].[AddRoleToUser]  @UserId = '1', @RoleName = 'Administrator';
+EXECUTE [dbo].[AddRoleToUser]  @GoTag = 'MuRakSss', @RoleName = 'Administrator';
 
