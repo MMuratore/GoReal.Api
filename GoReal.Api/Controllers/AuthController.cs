@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Tools.Security.Token;
 using GoReal.Models.Api.Mappers;
 using GoReal.Models.Api.Forms;
+using Microsoft.IdentityModel.Tokens;
 
 namespace GoReal.Api.Controllers
 {
@@ -17,10 +18,12 @@ namespace GoReal.Api.Controllers
     public class AuthController : Controller
     {
         IAuthRepository<D.User> _authService;
-        IRoleRepository _roleService;
+        IRoleRepository<D.Role> _roleService;
         ITokenService _tokenService;
 
-        public AuthController(ITokenService TokenService, IAuthRepository<D.User> AuthService, IRoleRepository RoleService)
+        private string _roles;
+
+        public AuthController(ITokenService TokenService, IAuthRepository<D.User> AuthService, IRoleRepository<D.Role> RoleService)
         {
             _authService = AuthService;
             _roleService = RoleService;
@@ -36,13 +39,19 @@ namespace GoReal.Api.Controllers
                 return Problem("Email or Password error", statusCode: (int)HttpStatusCode.NotFound);
 
             user.Roles = _roleService.GetUserRole(user.UserId).ToList();
+            foreach (D.Role role in user.Roles)
+            {
+                _roles += $"{role.RoleName} ";
+            }
+            _roles = _roles.Trim();
 
             user.Token = _tokenService.EncodeToken(user, user => new Claim[] {  
                 new Claim("UserId", user.UserId.ToString()),
                 new Claim("GoTag", user.GoTag),
                 new Claim("LastName", user.LastName), 
                 new Claim("FirstName", user.FirstName), 
-                new Claim("Email", user.Email)
+                new Claim("Email", user.Email),
+                new Claim("Roles", _roles)
             });
 
             return Ok(user);

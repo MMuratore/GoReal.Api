@@ -12,7 +12,7 @@ namespace GoReal.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AuthRequired]
+    [AuthRequired("Administrator")]
     public class RoleController : Controller
     {
         IRoleRepository<Role> _roleService;
