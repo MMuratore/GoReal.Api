@@ -28,4 +28,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="UserRankingId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="6bc3be31-35ed-43f8-814e-1ed17e5f3060" ChangeDateTime="08/21/2020 10:14:46">
+    <Property Name="ElementName" Value="[dbo].[GroupRole].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[GroupRole]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="GroupId" />
+  </Operation>
 </Operations>

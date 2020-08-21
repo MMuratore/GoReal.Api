@@ -3,6 +3,6 @@
 	@Password NVARCHAR(20)
 AS
 BEGIN
-	SELECT * FROM [User] WHERE [Email] = @Email AND
+	SELECT * FROM [ActiveUser] WHERE [Email] = @Email AND
 		[Password] = HASHBYTES ( 'SHA2_512', dbo.GetPreSalt() + @Password + dbo.GetPostSalt())
 END

@@ -1,0 +1,7 @@
+﻿CREATE PROCEDURE [dbo].[CreateRole]
+	@RoleName NVARCHAR(120)
+AS
+BEGIN
+	INSERT INTO [Role] VALUES (@RoleName) 
+END
+

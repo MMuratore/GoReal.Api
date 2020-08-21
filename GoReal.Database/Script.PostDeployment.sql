@@ -9,6 +9,11 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
+EXECUTE [dbo].[CreateRole]  @RoleName = 'Administrator';
+EXECUTE [dbo].[CreateRole]  @RoleName = 'Player';
+
 EXECUTE [dbo].[Register]  @GoTag = 'MuRakSss', @LastName = 'Muratore', @FirstName = 'Matthieu', 
     @Email = 'matthieu.muratore@gmail.com' , @Password = 'Test1234+';
-UPDATE [dbo].[User] SET [isAdmin] = 1 WHERE [GoTag] = 'MuRakSss';
+
+EXECUTE [dbo].[AddRoleToUser]  @UserId = '1', @RoleName = 'Administrator';
+
