@@ -16,8 +16,14 @@ namespace GoReal.Models.Services.Extensions
                 LastName = (string)Dr["LastName"],
                 FirstName = (string)Dr["FirstName"],
                 Email = (string)Dr["Email"],
-                isAdmin = (bool)Dr["isAdmin"],
-                isActive = (bool)Dr["isActive"],
+            };
+        }
+
+        internal static Role ToRole(this IDataRecord Dr)
+        {
+            return new Role()
+            {
+                RoleName = (string)Dr["RoleName"]
             };
         }
     }

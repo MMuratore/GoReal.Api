@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GoReal.Models.Api
+namespace GoReal.Models.Api.Forms
 {
-    public class Login
+    public class LoginForm
     {
         public string Email { get; set; }
         public string Password { get; set; }
