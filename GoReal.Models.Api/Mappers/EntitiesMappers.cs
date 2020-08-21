@@ -7,7 +7,7 @@ namespace GoReal.Models.Api.Mappers
 {
     public static class EntitiesMappers
     {
-        internal static User ToClient(this D.User entity)
+        public static User ToClient(this D.User entity)
         {
             return new User() { 
                 UserId = entity.UserId,
@@ -16,11 +16,9 @@ namespace GoReal.Models.Api.Mappers
                 FirstName = entity.FirstName,
                 Password = entity.Password,
                 Email = entity.Email,
-                isAdmin = entity.isAdmin,
-                isActive = entity.isActive
             };
         }
-        internal static D.User ToDal(this User entity)
+        public static D.User ToDal(this User entity)
         {
             return new D.User()
             {
@@ -30,8 +28,6 @@ namespace GoReal.Models.Api.Mappers
                 FirstName = entity.FirstName,
                 Password = entity.Password,
                 Email = entity.Email,
-                isAdmin = entity.isAdmin,
-                isActive = entity.isActive
             };
         }
     }
