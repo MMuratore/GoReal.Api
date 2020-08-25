@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Tools.Security.Token;
 using GoReal.Models.Api.Mappers;
 using GoReal.Models.Api.Forms;
-using Microsoft.IdentityModel.Tokens;
+using GoReal.Api.Infrastrucutre;
 
 namespace GoReal.Api.Controllers
 {
@@ -66,9 +66,41 @@ namespace GoReal.Api.Controllers
                 case UserResult.Register:
                     return Ok();
                 case UserResult.GoTagNotUnique:
-                    return Problem("GoTag already used", statusCode: (int)HttpStatusCode.Forbidden);
+                    return Problem("GoTag already used", statusCode: (int)HttpStatusCode.BadRequest);
                 case UserResult.EmailNotUnique:
-                    return Problem("Email already used", statusCode: (int)HttpStatusCode.Forbidden);
+                    return Problem("Email already used", statusCode: (int)HttpStatusCode.BadRequest);
+                default:
+                    break;
+            }
+            return NotFound();
+        }
+
+        [HttpDelete("{id}")]
+        [AuthRequired("Administrator,Player")]
+        public IActionResult Delete(int id)
+        {
+            if(_authService.Delete(id))
+                return Ok();
+            return NotFound();
+        }
+
+        [HttpPut("{id}")]
+        [AuthRequired("Administrator,Player")]
+        public IActionResult Put(int id,[FromBody] User user)
+        {
+            if (id != user.UserId)
+            {
+                return BadRequest();
+            }
+
+            switch (_authService.Update(id, user.ToDal()))
+            {
+                case UserResult.Update:
+                    return Ok();
+                case UserResult.GoTagNotUnique:
+                    return Problem("GoTag already used", statusCode: (int)HttpStatusCode.BadRequest);
+                case UserResult.EmailNotUnique:
+                    return Problem("Email already used", statusCode: (int)HttpStatusCode.BadRequest);
                 default:
                     break;
             }

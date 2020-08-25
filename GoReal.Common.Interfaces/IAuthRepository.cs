@@ -9,5 +9,7 @@ namespace GoReal.Common.Interfaces
     {
         UserResult Register(TUser user);
         TUser Login(string login, string password);
+        UserResult Update(int userId, TUser user);
+        bool Delete(int userId);
     }
 }

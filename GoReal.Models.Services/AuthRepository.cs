@@ -48,5 +48,38 @@ namespace GoReal.Models.Services
             }
             return UserResult.Register;
         }
+
+        public UserResult Update(int userId, User user)
+        {
+            bool isUpdate = false;
+            Command cmd = new Command("UpdateUser", true);
+            cmd.AddParameter("UserId", userId);
+            cmd.AddParameter("GoTag", user.GoTag);
+            cmd.AddParameter("LastName", user.LastName);
+            cmd.AddParameter("FirstName", user.FirstName);
+            cmd.AddParameter("Email", user.Email);
+            cmd.AddParameter("Password", user.Password);
+            try
+            {
+                isUpdate = _connection.ExecuteNonQuery(cmd) == 1;
+            }
+            catch (Exception e)
+            {
+                if (e.Message.Contains("UK_User_GoTag")) return UserResult.GoTagNotUnique;
+                if (e.Message.Contains("UK_User_Email")) return UserResult.EmailNotUnique;
+            }
+            if(isUpdate)
+                return UserResult.Update;
+            else
+                return UserResult.Failed;
+        }
+
+        public bool Delete(int userId)
+        {
+            Command cmd = new Command("DeleteUser", true);
+            cmd.AddParameter("userId", userId);
+
+            return _connection.ExecuteNonQuery(cmd) == 1;
+        }
     }
 }
