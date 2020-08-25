@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Data.Common;
+using System.Data.SqlClient;
+using Tools.Databases;
 using Tools.Security.Token;
 
 namespace GoReal.Api
@@ -33,9 +36,13 @@ namespace GoReal.Api
             IConfigurationSection dbSection = Configuration.GetSection("DbConnectionSettings");
             DbConnectionSettings dbConnectionSettings = dbSection.Get<DbConnectionSettings>();
             string connectionString = dbSection.Get<DbConnectionSettings>().SqlServerConnectionString;
+            
+            services.AddSingleton<DbProviderFactory>(sp => SqlClientFactory.Instance);
+            services.AddSingleton(sp => new ConnectionInfo(connectionString));
+            services.AddSingleton<Connection>();
 
-            services.AddSingleton<IAuthRepository<User>, AuthRepository>(sp => new AuthRepository(connectionString));
-            services.AddSingleton<IRoleRepository<Role>, RoleRepository>(sp => new RoleRepository(connectionString));
+            services.AddSingleton<IAuthRepository<User>, AuthRepository>();
+            services.AddSingleton<IRoleRepository<Role>, RoleRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

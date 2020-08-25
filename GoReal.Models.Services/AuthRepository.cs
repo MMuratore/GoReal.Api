@@ -15,9 +15,9 @@ namespace GoReal.Models.Services
     {
         private Connection _connection;
 
-        public AuthRepository(string connectionString)
+        public AuthRepository(Connection connection)
         {
-            _connection = new Connection(new ConnectionInfo(connectionString), SqlClientFactory.Instance);
+            _connection = connection;
         }
 
         public User Login(string login, string password)

@@ -15,9 +15,9 @@ namespace GoReal.Models.Services
     {
         private Connection _connection;
 
-        public RoleRepository(string connectionString)
+        public RoleRepository(Connection connection)
         {
-            _connection = new Connection(new ConnectionInfo(connectionString), SqlClientFactory.Instance);
+            _connection = connection;
         }
 
         public RoleResult AddRoleToUser(string goTag, string roleName)
