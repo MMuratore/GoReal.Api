@@ -82,6 +82,9 @@
     <Build Include="Procedures\Administrator\User\AddRoleToUser.sql" />
     <Build Include="Procedures\Role\GetUserRole.sql" />
     <Build Include="Views\ActiveUserRole.sql" />
+    <Build Include="Procedures\User\UpdateUser.sql" />
+    <Build Include="Procedures\User\DeleteUser.sql" />
+    <Build Include="Triggers\DeleteActiveUserRole.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
