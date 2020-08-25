@@ -15,6 +15,6 @@ namespace GoReal.Models.Api
         public string Password { get; set; }
         public string Token { get; set; }
 
-        public IEnumerable<Role> Roles { get; set; }
+        public Role Roles { get; set; }
     }
 }

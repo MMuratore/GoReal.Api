@@ -9,11 +9,14 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
+EXECUTE [dbo].[CreateRole]  @RoleName = 'SuperAdministrator';
 EXECUTE [dbo].[CreateRole]  @RoleName = 'Administrator';
+EXECUTE [dbo].[CreateRole]  @RoleName = 'Moderator';
+EXECUTE [dbo].[CreateRole]  @RoleName = 'Viewer';
 EXECUTE [dbo].[CreateRole]  @RoleName = 'Player';
 
 EXECUTE [dbo].[Register]  @GoTag = 'MuRakSss', @LastName = 'Muratore', @FirstName = 'Matthieu', 
     @Email = 'matthieu.muratore@gmail.com' , @Password = 'Test1234+';
 
-EXECUTE [dbo].[AddRoleToUser]  @GoTag = 'MuRakSss', @RoleName = 'Administrator';
+EXECUTE [dbo].[AddRoleToUser]  @GoTag = 'MuRakSss', @RoleName = 'SuperAdministrator';
 

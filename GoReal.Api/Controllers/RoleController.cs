@@ -12,7 +12,7 @@ namespace GoReal.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AuthRequired("Administrator")]
+    [AuthRequired(Role.SuperAdministrator)]
     public class RoleController : Controller
     {
         IRoleRepository<Role> _roleService;
@@ -20,21 +20,6 @@ namespace GoReal.Api.Controllers
         public RoleController(IRoleRepository<Role> RoleService)
         {
             _roleService = RoleService;
-        }
-
-        [HttpPost]
-        public IActionResult Post([FromBody] Role role)
-        {
-            switch (_roleService.CreateRole(role.RoleName))
-            {
-                case RoleResult.Register:
-                    return Ok();
-                case RoleResult.RoleNameNotUnique:
-                    return Problem("RoleName already used", statusCode: (int)HttpStatusCode.Forbidden);
-                default:
-                    break;
-            }
-            return NotFound();
         }
 
         [HttpPut]
@@ -45,11 +30,11 @@ namespace GoReal.Api.Controllers
                 case RoleResult.Register:
                     return Ok();
                 case RoleResult.UserRoleNotUnique:
-                    return Problem("User already possess that role", statusCode: (int)HttpStatusCode.Forbidden);
+                    return Problem("User already possess that role", statusCode: (int)HttpStatusCode.BadRequest);
                 case RoleResult.UserNotExist:
-                    return Problem("Unknown user", statusCode: (int)HttpStatusCode.Forbidden);
+                    return Problem("Unknown user", statusCode: (int)HttpStatusCode.BadRequest);
                 case RoleResult.RoleNotExist:
-                    return Problem("Unknown role", statusCode: (int)HttpStatusCode.Forbidden);
+                    return Problem("Unknown role", statusCode: (int)HttpStatusCode.BadRequest);
                 default:
                     break;
             }

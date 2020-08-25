@@ -1,8 +1,6 @@
 ﻿using GoReal.Models.Entities;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace GoReal.Models.Services.Extensions
 {
@@ -21,10 +19,7 @@ namespace GoReal.Models.Services.Extensions
 
         internal static Role ToRole(this IDataRecord Dr)
         {
-            return new Role()
-            {
-                RoleName = (string)Dr["RoleName"]
-            };
+            return (Role)Enum.Parse(typeof(Role), (string)Dr["RoleName"]);
         }
     }
 }

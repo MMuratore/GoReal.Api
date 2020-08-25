@@ -1,11 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GoReal.Models.Entities
 {
-    public class Role
+    [Flags]
+    public enum Role
     {
-        public string RoleName { get; set; }
+        None = 0,
+        Viewer = 1,
+        Player = 2,
+        Moderator = 4,
+        Administrator = 8,
+        SuperAdministrator = 16
     }
 }

@@ -20,22 +20,6 @@ namespace GoReal.Models.Services
             _connection = new Connection(new ConnectionInfo(connectionString), SqlClientFactory.Instance);
         }
 
-        public RoleResult CreateRole(string roleName)
-        {
-            Command cmd = new Command("CreateRole", true);
-            cmd.AddParameter("RoleName", roleName);
-            try
-            {
-                _connection.ExecuteNonQuery(cmd);
-            }
-            catch (Exception e)
-            {
-                if (e.Message.Contains("UK_Role_RoleName")) return RoleResult.RoleNameNotUnique;
-            }
-            return RoleResult.Register;
-            
-        }
-
         public RoleResult AddRoleToUser(string goTag, string roleName)
         {
             Command cmd = new Command("AddRoleToUser", true);
@@ -54,12 +38,16 @@ namespace GoReal.Models.Services
             return RoleResult.Register;
         }
 
-        public IEnumerable<Role> GetUserRole(int userId)
+        public Role GetUserRole(int userId)
         {
+            Role userRole = Role.None;
+
             Command cmd = new Command("GetUserRole", true);
             cmd.AddParameter("UserId", userId);
+            IEnumerable<Role> roles = _connection.ExecuteReader(cmd, (dr) => dr.ToRole());
+            foreach (Role role in roles) { userRole |= role; }
 
-            return _connection.ExecuteReader(cmd, (dr) => dr.ToRole());    
+            return userRole;
         }
     }
 }

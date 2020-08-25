@@ -21,8 +21,6 @@ namespace GoReal.Api.Controllers
         IRoleRepository<D.Role> _roleService;
         ITokenService _tokenService;
 
-        private string _roles;
-
         public AuthController(ITokenService TokenService, IAuthRepository<D.User> AuthService, IRoleRepository<D.Role> RoleService)
         {
             _authService = AuthService;
@@ -37,13 +35,8 @@ namespace GoReal.Api.Controllers
             User user = _authService.Login(form.Email, form.Password)?.ToClient();
             if (user is null) 
                 return Problem("Email or Password error", statusCode: (int)HttpStatusCode.NotFound);
-
-            user.Roles = _roleService.GetUserRole(user.UserId).ToList();
-            foreach (D.Role role in user.Roles)
-            {
-                _roles += $"{role.RoleName} ";
-            }
-            _roles = _roles.Trim();
+            
+            user.Roles = _roleService.GetUserRole(user.UserId);
 
             user.Token = _tokenService.EncodeToken(user, user => new Claim[] {  
                 new Claim("UserId", user.UserId.ToString()),
@@ -51,7 +44,7 @@ namespace GoReal.Api.Controllers
                 new Claim("LastName", user.LastName), 
                 new Claim("FirstName", user.FirstName), 
                 new Claim("Email", user.Email),
-                new Claim("Roles", _roles)
+                new Claim("Roles", ((int)user.Roles).ToString())
             });
 
             return Ok(user);
@@ -76,7 +69,7 @@ namespace GoReal.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        [AuthRequired("Administrator,Player")]
+        [AuthRequired]
         public IActionResult Delete(int id)
         {
             if(_authService.Delete(id))
@@ -85,7 +78,7 @@ namespace GoReal.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        [AuthRequired("Administrator,Player")]
+        [AuthRequired]
         public IActionResult Put(int id,[FromBody] User user)
         {
             if (id != user.UserId)
