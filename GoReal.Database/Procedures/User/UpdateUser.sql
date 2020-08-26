@@ -7,7 +7,7 @@
 	@Password NVARCHAR(20)
 AS
 BEGIN
-	UPDATE [User] SET 
+	UPDATE [ActiveUser] SET 
 		[GoTag] = @GoTag, 
 		[LastName] = @LastName,  
 		[FirstName] = @FirstName, 

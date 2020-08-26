@@ -3,10 +3,7 @@ using GoReal.Common.Interfaces.Enumerations;
 using GoReal.Models.Entities;
 using GoReal.Models.Services.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 using Tools.Databases;
 
 namespace GoReal.Models.Services
@@ -79,7 +76,7 @@ namespace GoReal.Models.Services
             Command cmd = new Command("DeleteUser", true);
             cmd.AddParameter("userId", userId);
 
-            return _connection.ExecuteNonQuery(cmd) == 1;
+            return _connection.ExecuteNonQuery(cmd) == 2;
         }
     }
 }

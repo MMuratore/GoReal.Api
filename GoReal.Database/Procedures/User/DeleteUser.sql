@@ -2,6 +2,6 @@
 	@UserId INT
 AS
 BEGIN
-	DELETE FROM [User] WHERE [UserId] = @UserId;
+	DELETE FROM [ActiveUser] WHERE [UserId] = @UserId;
 END
 
