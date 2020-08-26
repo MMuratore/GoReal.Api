@@ -26,6 +26,17 @@ namespace GoReal.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("localhost",
+                    builder =>
+                    {
+                        builder.WithOrigins("https://localhost:4200");
+                        builder.AllowAnyMethod();
+                        builder.AllowAnyHeader();
+                    });
+            });
+
             services.AddControllers();
 
             IConfigurationSection jwtSection = Configuration.GetSection("JwtBearerTokenSettings");
@@ -57,6 +68,8 @@ namespace GoReal.Api
 
             app.UseRouting();
 
+            app.UseCors();
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

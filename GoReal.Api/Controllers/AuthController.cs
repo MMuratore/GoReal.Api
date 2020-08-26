@@ -10,12 +10,14 @@ using Tools.Security.Token;
 using GoReal.Models.Api.Mappers;
 using GoReal.Models.Api.Forms;
 using GoReal.Api.Infrastrucutre;
+using Microsoft.AspNetCore.Cors;
 
 namespace GoReal.Api.Controllers
 {
+    [EnableCors("localhost")]
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController : Controller
+    public class AuthController : ControllerBase
     {
         IAuthRepository<D.User> _authService;
         IRoleRepository<D.Role> _roleService;

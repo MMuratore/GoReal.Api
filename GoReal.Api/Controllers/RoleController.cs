@@ -2,18 +2,18 @@
 using GoReal.Common.Interfaces;
 using GoReal.Common.Interfaces.Enumerations;
 using Microsoft.AspNetCore.Mvc;
-using GoReal.Models.Api.Mappers;
 using GoReal.Models.Entities;
 using GoReal.Models.Api.Forms;
 using GoReal.Api.Infrastrucutre;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 
 namespace GoReal.Api.Controllers
 {
+    [EnableCors("localhost")]
     [Route("api/[controller]")]
     [ApiController]
     [AuthRequired(Role.SuperAdministrator)]
-    public class RoleController : Controller
+    public class RoleController : ControllerBase
     {
         IRoleRepository<Role> _roleService;
 
