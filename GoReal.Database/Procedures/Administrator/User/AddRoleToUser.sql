@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[AddRoleToUser]
-	@GoTag NVARCHAR(120),
+	@GoTag NVARCHAR(50),
 	@RoleName NVARCHAR(120)
 AS
 BEGIN
