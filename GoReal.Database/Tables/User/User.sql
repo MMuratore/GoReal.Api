@@ -1,9 +1,9 @@
 ﻿CREATE TABLE [dbo].[User]
 (
 	[UserId] INT NOT NULL IDENTITY, 
-    [GoTag] NVARCHAR(120) NOT NULL,
-    [LastName] NVARCHAR(320) NULL, 
-    [FirstName] NVARCHAR(320) NULL, 
+    [GoTag] NVARCHAR(50) NOT NULL,
+    [LastName] NVARCHAR(50) NULL, 
+    [FirstName] NVARCHAR(50) NULL, 
     [Email] NVARCHAR(320) NOT NULL, 
     [Password] BINARY(64) NOT NULL, 
     [isActive] BIT NOT NULL DEFAULT 1, 
