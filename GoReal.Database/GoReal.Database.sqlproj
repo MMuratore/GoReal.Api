@@ -60,29 +60,26 @@
     <Folder Include="Procedures" />
     <Folder Include="Tables" />
     <Folder Include="Procedures\User" />
-    <Folder Include="Views" />
     <Folder Include="Tables\User" />
-    <Folder Include="Triggers" />
-    <Folder Include="Procedures\Administrator" />
-    <Folder Include="Procedures\Administrator\Role" />
-    <Folder Include="Procedures\Administrator\User" />
+    <Folder Include="Procedures\Auth" />
     <Folder Include="Procedures\Role" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Functions\GetPostSalt.sql" />
     <Build Include="Functions\GetPreSalt.sql" />
-    <Build Include="Procedures\User\Login.sql" />
-    <Build Include="Procedures\User\Register.sql" />
-    <Build Include="Views\ActiveUser.sql" />
     <Build Include="Tables\User\Role.sql" />
     <Build Include="Tables\User\User.sql" />
     <Build Include="Tables\User\UserRole.sql" />
-    <Build Include="Triggers\DeleteActiveUser.sql" />
-    <Build Include="Procedures\Administrator\Role\CreateRole.sql" />
-    <Build Include="Procedures\Administrator\User\AddRoleToUser.sql" />
-    <Build Include="Procedures\Role\GetUserRole.sql" />
-    <Build Include="Procedures\User\UpdateUser.sql" />
-    <Build Include="Procedures\User\DeleteUser.sql" />
+    <Build Include="Procedures\User\UserUpdate.sql" />
+    <Build Include="Procedures\User\UserDelete.sql" />
+    <Build Include="Functions\GetUserRole.sql" />
+    <Build Include="Procedures\Auth\Login.sql" />
+    <Build Include="Procedures\Auth\Register.sql" />
+    <Build Include="Procedures\User\UserActivate.sql" />
+    <Build Include="Procedures\User\UserBan.sql" />
+    <Build Include="Procedures\User\UserDeleteAdmin.sql" />
+    <Build Include="Procedures\Role\RoleCreate.sql" />
+    <Build Include="Procedures\Role\AddRoleToUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

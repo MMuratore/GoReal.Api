@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[CreateRole]
+﻿CREATE PROCEDURE [dbo].[RoleCreate]
 	@RoleName NVARCHAR(120)
 AS
 BEGIN

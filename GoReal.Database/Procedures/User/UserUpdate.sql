@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[UpdateUser]
+﻿CREATE PROCEDURE [dbo].[UserUpdate]
 	@UserId INT,
 	@GoTag NVARCHAR(120), 
 	@LastName NVARCHAR(120), 
@@ -7,7 +7,7 @@
 	@Password NVARCHAR(20)
 AS
 BEGIN
-	UPDATE [ActiveUser] SET 
+	UPDATE [User] SET 
 		[GoTag] = @GoTag, 
 		[LastName] = @LastName,  
 		[FirstName] = @FirstName, 
