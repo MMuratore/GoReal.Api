@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Security.Claims;
 using GoReal.Common.Interfaces;
 using GoReal.Common.Interfaces.Enumerations;
@@ -9,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Tools.Security.Token;
 using GoReal.Models.Api.Mappers;
 using GoReal.Models.Api.Forms;
-using GoReal.Api.Infrastrucutre;
 using Microsoft.AspNetCore.Cors;
 
 namespace GoReal.Api.Controllers
@@ -20,13 +18,11 @@ namespace GoReal.Api.Controllers
     public class AuthController : ControllerBase
     {
         IAuthRepository<D.User> _authService;
-        IRoleRepository<D.Role> _roleService;
         ITokenService _tokenService;
 
-        public AuthController(ITokenService TokenService, IAuthRepository<D.User> AuthService, IRoleRepository<D.Role> RoleService)
+        public AuthController(ITokenService TokenService, IAuthRepository<D.User> AuthService)
         {
             _authService = AuthService;
-            _roleService = RoleService;
             _tokenService = TokenService;
         }
 
@@ -34,22 +30,30 @@ namespace GoReal.Api.Controllers
         [Route("login")]
         public IActionResult Login([FromBody] LoginForm form)
         {
-            User user = _authService.Login(form.Email, form.Password)?.ToClient();
-            if (user is null) 
-                return Problem("Email or Password error", statusCode: (int)HttpStatusCode.NotFound);
+            var results = _authService.Login(form.Email, form.Password);
+            User user = results.Item1?.ToClient();
+
+            switch (results.Item2)
+            {
+                case UserResult.Login:
+                    user.Token = _tokenService.EncodeToken(user, user => new Claim[] {
+                        new Claim("UserId", user.UserId.ToString()),
+                        new Claim("GoTag", user.GoTag),
+                        new Claim("LastName", user.LastName),
+                        new Claim("FirstName", user.FirstName),
+                        new Claim("Email", user.Email),
+                        new Claim("Roles", ((int)user.Roles).ToString())
+                    });
+                    return Ok(user);
+                case UserResult.Ban:
+                    return Problem(((int)UserResult.Ban).ToString(), statusCode: (int)HttpStatusCode.NotFound);
+                case UserResult.Inactive:
+                    return Problem(((int)UserResult.Inactive).ToString(), statusCode: (int)HttpStatusCode.NotFound);
+                default:
+                    break;
+            }
             
-            user.Roles = _roleService.GetUserRole(user.UserId);
-
-            user.Token = _tokenService.EncodeToken(user, user => new Claim[] {  
-                new Claim("UserId", user.UserId.ToString()),
-                new Claim("GoTag", user.GoTag),
-                new Claim("LastName", user.LastName), 
-                new Claim("FirstName", user.FirstName), 
-                new Claim("Email", user.Email),
-                new Claim("Roles", ((int)user.Roles).ToString())
-            });
-
-            return Ok(user);
+            return NotFound();
         }
 
         [HttpPost]
@@ -61,41 +65,9 @@ namespace GoReal.Api.Controllers
                 case UserResult.Register:
                     return Ok();
                 case UserResult.GoTagNotUnique:
-                    return Problem("GoTag already used", statusCode: (int)HttpStatusCode.BadRequest);
+                    return Problem(((int)UserResult.GoTagNotUnique).ToString(), statusCode: (int)HttpStatusCode.BadRequest);
                 case UserResult.EmailNotUnique:
-                    return Problem("Email already used", statusCode: (int)HttpStatusCode.BadRequest);
-                default:
-                    break;
-            }
-            return NotFound();
-        }
-
-        [HttpDelete("{id}")]
-        [AuthRequired]
-        public IActionResult Delete(int id)
-        {
-            if(_authService.Delete(id))
-                return Ok();
-            return NotFound();
-        }
-
-        [HttpPut("{id}")]
-        [AuthRequired]
-        public IActionResult Put(int id,[FromBody] User user)
-        {
-            if (id != user.UserId)
-            {
-                return BadRequest();
-            }
-
-            switch (_authService.Update(id, user.ToDal()))
-            {
-                case UserResult.Update:
-                    return Ok();
-                case UserResult.GoTagNotUnique:
-                    return Problem("GoTag already used", statusCode: (int)HttpStatusCode.BadRequest);
-                case UserResult.EmailNotUnique:
-                    return Problem("Email already used", statusCode: (int)HttpStatusCode.BadRequest);
+                    return Problem(((int)UserResult.EmailNotUnique).ToString(), statusCode: (int)HttpStatusCode.BadRequest);
                 default:
                     break;
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GoReal.Models.Entities;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using D = GoReal.Models.Entities;
@@ -16,6 +17,9 @@ namespace GoReal.Models.Api.Mappers
                 FirstName = entity.FirstName,
                 Password = entity.Password,
                 Email = entity.Email,
+                isActive = entity.isActive,
+                isBan = entity.isBan,
+                Roles = (Role)entity.Roles
             };
         }
         public static D.User ToDal(this User entity)
@@ -28,6 +32,8 @@ namespace GoReal.Models.Api.Mappers
                 FirstName = entity.FirstName,
                 Password = entity.Password,
                 Email = entity.Email,
+                isActive = entity.isActive,
+                isBan = entity.isBan
             };
         }
     }

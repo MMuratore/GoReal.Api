@@ -1,7 +1,4 @@
 ﻿using GoReal.Models.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GoReal.Models.Api
 {
@@ -14,7 +11,8 @@ namespace GoReal.Models.Api
         public string Email { get; set; }
         public string Password { get; set; }
         public string Token { get; set; }
-
+        public bool isActive { get; set; }
+        public bool isBan { get; set; }
         public Role Roles { get; set; }
     }
 }

@@ -52,8 +52,6 @@ namespace GoReal.Api.Infrastrucutre
 
                     if (!UserRoles.HasFlag(RequiredRoles))
                         context.Result = new StatusCodeResult((int)HttpStatusCode.Unauthorized);
-                    else
-                        context.RouteData.Values.Add("userId", user["UserId"]);
                 }
             }
 

@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GoReal.Common.Interfaces\GoReal.Common.Interfaces.csproj" />
     <ProjectReference Include="..\GoReal.Models.Entities\GoReal.Models.Entities.csproj" />
     <ProjectReference Include="..\GoReal.Models.Services\GoReal.Models.Services.csproj" />

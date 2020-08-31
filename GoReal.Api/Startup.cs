@@ -53,6 +53,8 @@ namespace GoReal.Api
             services.AddSingleton<Connection>();
 
             services.AddSingleton<IAuthRepository<User>, AuthRepository>();
+            services.AddSingleton<IUserRepository<User>, UserRepository>();
+
             services.AddSingleton<IRoleRepository<Role>, RoleRepository>();
         }
 
