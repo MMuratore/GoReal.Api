@@ -37,17 +37,5 @@ namespace GoReal.Models.Services
             }
             return RoleResult.Register;
         }
-
-        public Role GetUserRole(int userId)
-        {
-            Role userRole = Role.None;
-
-            Command cmd = new Command("GetUserRole", true);
-            cmd.AddParameter("UserId", userId);
-            IEnumerable<Role> roles = _connection.ExecuteReader(cmd, (dr) => dr.ToRole());
-            foreach (Role role in roles) { userRole |= role; }
-
-            return userRole;
-        }
     }
 }

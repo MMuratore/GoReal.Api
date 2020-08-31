@@ -12,5 +12,8 @@ namespace GoReal.Models.Entities
         public string FirstName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public bool isActive { get; set; }
+        public bool isBan { get; set; }
+        public int Roles { get; set; }
     }
 }

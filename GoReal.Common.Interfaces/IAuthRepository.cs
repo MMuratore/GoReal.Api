@@ -7,9 +7,7 @@ namespace GoReal.Common.Interfaces
 {
     public interface IAuthRepository<TUser>
     {
+        (TUser, UserResult) Login(string login, string password);
         UserResult Register(TUser user);
-        TUser Login(string login, string password);
-        UserResult Update(int userId, TUser user);
-        bool Delete(int userId);
     }
 }

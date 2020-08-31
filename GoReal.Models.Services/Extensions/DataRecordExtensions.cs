@@ -8,18 +8,17 @@ namespace GoReal.Models.Services.Extensions
     {
         internal static User ToUser(this IDataRecord Dr)
         {
-            return new User() { 
+            int test = (Dr.FieldCount);
+            return new User() {
                 UserId = (int)Dr["UserId"],
                 GoTag = (string)Dr["GoTag"],
                 LastName = (string)Dr["LastName"],
                 FirstName = (string)Dr["FirstName"],
                 Email = (string)Dr["Email"],
+                isActive = (bool)Dr["isActive"],
+                isBan = (bool)Dr["isBan"],
+                Roles = (Dr.FieldCount) == 9 ? (int)Dr["Role"] : 0
             };
-        }
-
-        internal static Role ToRole(this IDataRecord Dr)
-        {
-            return (Role)Enum.Parse(typeof(Role), (string)Dr["RoleName"]);
         }
     }
 }

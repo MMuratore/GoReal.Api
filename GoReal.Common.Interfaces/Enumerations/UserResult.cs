@@ -7,10 +7,12 @@ namespace GoReal.Common.Interfaces.Enumerations
     public enum UserResult
     {
         Register,
-        Delete,
-        Update,
         GoTagNotUnique,
         EmailNotUnique,
-        Failed
+        Update,
+        Ban,
+        Inactive,
+        Failed,
+        Login
     }
 }
