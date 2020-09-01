@@ -19,7 +19,7 @@ namespace GoReal.Models.Services
 
         public IEnumerable<User> Get()
         {
-            Command cmd = new Command("SELECT * FROM [User]");
+            Command cmd = new Command("UserGetAll", true);
 
             return _connection.ExecuteReader(cmd, (dr) => dr.ToUser());
         }

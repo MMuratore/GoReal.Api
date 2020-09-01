@@ -80,6 +80,7 @@
     <Build Include="Procedures\User\UserDeleteAdmin.sql" />
     <Build Include="Procedures\Role\RoleCreate.sql" />
     <Build Include="Procedures\Role\AddRoleToUser.sql" />
+    <Build Include="Procedures\User\UserGetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

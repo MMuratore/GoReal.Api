@@ -8,7 +8,6 @@ namespace GoReal.Models.Services.Extensions
     {
         internal static User ToUser(this IDataRecord Dr)
         {
-            int test = (Dr.FieldCount);
             return new User() {
                 UserId = (int)Dr["UserId"],
                 GoTag = (string)Dr["GoTag"],
@@ -17,7 +16,7 @@ namespace GoReal.Models.Services.Extensions
                 Email = (string)Dr["Email"],
                 isActive = (bool)Dr["isActive"],
                 isBan = (bool)Dr["isBan"],
-                Roles = (Dr.FieldCount) == 9 ? (int)Dr["Role"] : 0
+                Roles = (int)Dr["Role"]
             };
         }
     }

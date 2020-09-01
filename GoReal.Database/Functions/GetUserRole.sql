@@ -1,5 +1,5 @@
 ﻿CREATE FUNCTION [dbo].[GetUserRole]( 
-	@Email NVARCHAR(320))
+	@UserId INT)
 RETURNS INT
 AS
 BEGIN
@@ -7,8 +7,8 @@ BEGIN
 
     DECLARE @Roles TABLE ([RoleName] NVARCHAR(120));
 	INSERT INTO @Roles SELECT R.[RoleName] FROM [Role] AS R JOIN [UserRole] AS UR
-		ON R.[RoleId] = UR.[RoleId] JOIN [User] AS U ON UR.[UserId] = U.[UserId]
-			WHERE U.[Email] = @Email
+		ON R.[RoleId] = UR.[RoleId]
+			WHERE UR.[UserId] = @UserId
 	IF EXISTS (SELECT * FROM @Roles WHERE [RoleName] = 'Viewer')
 		SET @UserRole += 1;
 	IF EXISTS (SELECT * FROM @Roles WHERE [RoleName] = 'Player')

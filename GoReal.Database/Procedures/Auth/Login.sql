@@ -11,6 +11,6 @@ BEGIN
 	IF EXISTS (SELECT [isBan] FROM @State WHERE [isBan] = 1)
 		RAISERROR(N'User is Ban',16,4);  
 
-	SELECT [UserId], [GoTag], [LastName] , [FirstName], [Email], [Password], [isActive], [isBan], dbo.GetUserRole(@Email) AS [Role] FROM [User] WHERE [Email] = @Email AND
+	SELECT [UserId], [GoTag], [LastName] , [FirstName], [Email], [Password], [isActive], [isBan], dbo.GetUserRole([UserId]) AS [Role] FROM [User] WHERE [Email] = @Email AND
 		[Password] = HASHBYTES ( 'SHA2_512', dbo.GetPreSalt() + @Password + dbo.GetPostSalt()) AND [isActive] = 1 AND [isBan] = 0
 END
