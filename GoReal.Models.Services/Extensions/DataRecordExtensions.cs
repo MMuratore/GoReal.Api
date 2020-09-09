@@ -19,5 +19,15 @@ namespace GoReal.Models.Services.Extensions
                 Roles = (int)Dr["Role"]
             };
         }
+
+        internal static Stone ToStone(this IDataRecord Dr)
+        {
+            return new Stone()
+            {
+                Row = (int)Dr["Row"],
+                Column = (int)Dr["Column"],
+                Color = (bool)Dr["Color"]
+            };
+        }
     }
 }
