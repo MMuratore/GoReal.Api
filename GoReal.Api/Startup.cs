@@ -54,7 +54,7 @@ namespace GoReal.Api
 
             services.AddSingleton<IAuthRepository<User>, AuthRepository>();
             services.AddSingleton<IUserRepository<User>, UserRepository>();
-
+            services.AddSingleton<IStoneRepository<Stone>, StoneRepository>();
             services.AddSingleton<IRoleRepository<Role>, RoleRepository>();
         }
 

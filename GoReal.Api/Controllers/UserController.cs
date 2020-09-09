@@ -10,8 +10,6 @@ using GoReal.Models.Api.Mappers;
 using GoReal.Api.Infrastrucutre;
 using Microsoft.AspNetCore.Cors;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Primitives;
 using GoReal.Models.Api.Forms;
 
 namespace GoReal.Api.Controllers
