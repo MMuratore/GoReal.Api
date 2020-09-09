@@ -1,0 +1,6 @@
+﻿CREATE PROCEDURE [dbo].[RuleCreate]
+	@RuleName NVARCHAR(120)
+AS
+BEGIN
+	INSERT INTO [Rule] VALUES (@RuleName)
+END
