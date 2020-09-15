@@ -12,7 +12,9 @@ namespace GoReal.Models.Api
         public int Height { get; set; }
         public int Width { get; set; }
         public int?[] Capture { get; set; }
-        public Dictionary<bool, Stone> StoneDiff { get; set; }
+
+        public List<bool> Action { get; set; }
+        public List<Stone> StoneDiff { get; set; }
 
         private bool[] Player { get; set; }
         private Stone KoInfo { get; set; }
@@ -25,7 +27,8 @@ namespace GoReal.Models.Api
             this.Capture = new int?[] { null, null };
             this.Player = new bool[] { true, false };
             this.KoInfo = new Stone();
-            this.StoneDiff = new Dictionary<bool, Stone>();
+            this.StoneDiff = new List<Stone>();
+            this.Action = new List<bool>();
 
             foreach (bool?[] row in StoneMap)
             {
@@ -58,9 +61,11 @@ namespace GoReal.Models.Api
 
             foreach (Stone deadNeighbor in deadNeighbors)
             {
-                if (move.Get(deadNeighbor) is null) continue;
+                deadNeighbor.Color = move.Get(deadNeighbor);
 
-                foreach (Stone removeStone in move.GetChain(deadNeighbor))
+                if (deadNeighbor.Color is null) continue;
+                List<Stone> deadChain = move.GetChain(deadNeighbor);
+                foreach (Stone removeStone in deadChain)
                 {
                     removeStone.Color = null;
                     move.Set(removeStone).SetCaptures(stone.Color, null, x => x + 1);
@@ -157,7 +162,8 @@ namespace GoReal.Models.Api
                 for (int y = 0; y < Height; y++)
                 {
                     Stone stone = new Stone() { Row = x, Column = y, Color = null };
-                    if (Get(stone) is null || liberties[x][y] is true) continue;
+                    stone.Color = Get(stone);
+                    if (stone.Color is null || liberties[x][y] is true) continue;
                     if (!HasLiberties(stone)) return false;
 
                     GetChain(stone).ForEach(v => liberties[v.Row][v.Column] = true);
@@ -171,8 +177,9 @@ namespace GoReal.Models.Api
         {
 
             DiffForm diffForm = new DiffForm();
-            diffForm.Action = new List<bool>(StoneDiff.Keys);
-            diffForm.Stones = new List<Stone>(StoneDiff.Values);
+            diffForm.Action = new List<bool>(Action);
+            diffForm.Stones = new List<Stone>(StoneDiff);
+            Action.Clear();
             StoneDiff.Clear();
             diffForm.BlackCapture = GetCaptures(true);
             diffForm.WhiteCapture = GetCaptures(false);
@@ -191,8 +198,9 @@ namespace GoReal.Models.Api
             if (Has(stone))
             {
                 StoneMap[stone.Column][stone.Row] = stone.Color;
-                if (stone.Color is null) StoneDiff.Add(false, stone);
-                else StoneDiff.Add(true, stone);
+                StoneDiff.Add(stone);
+                if (stone.Color is null) Action.Add(false);
+                else Action.Add(true);
             }
 
             return this;
@@ -243,11 +251,17 @@ namespace GoReal.Models.Api
             int x = stone.Row;
             int y = stone.Column;
 
-            return new List<Stone> { 
+            List<Stone> neighbors = new List<Stone> { 
                 new Stone() { Row = x - 1, Column = y, Color = null }, 
                 new Stone() { Row = x + 1, Column = y, Color = null }, 
                 new Stone() { Row = x, Column = y - 1, Color = null }, 
                 new Stone() { Row = x, Column = y + 1, Color = null } }.Where(v => Has(v)).ToList();
+
+            foreach (Stone neigbhbor in neighbors)
+            {
+                neigbhbor.Color = Get(neigbhbor);
+            }
+            return neighbors;
         }
 
         public bool HasLiberties(Stone stone, bool?[][] visitedParam = null)

@@ -107,10 +107,10 @@ namespace GoReal.Api.Controllers
             board.SetCaptures(false, game.WhiteCapture);
             Board newBoard = board.MakeMove(newStone);
 
-            foreach (KeyValuePair<bool,D.Stone> kvp in newBoard.StoneDiff)
+            foreach (D.Stone stone in newBoard.StoneDiff)
             {
-                if (kvp.Key) _stoneService.AddStone(id, kvp.Value);
-                else _stoneService.DeleteStone(id, kvp.Value);
+                if (stone.Color is null) _stoneService.DeleteStone(id, stone);
+                else _stoneService.AddStone(id, stone);
             }
 
             return Ok(newBoard.Diff());

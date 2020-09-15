@@ -44,6 +44,10 @@ EXECUTE[dbo].[GameCreate] @Date = '2020-09-03', @Size = 9, @Komi = 0, @Handicap 
 		@RuleId = 1, @BlackPlayerId = 2, @WhitePlayerId = 1;
 
 EXECUTE [dbo].[AddStone] @GameId = 3, @Row = 7, @Column = 7, @Color = 0;
-EXECUTE [dbo].[AddStone] @GameId = 3, @Row = 6, @Column = 7, @Color = 1;
-EXECUTE [dbo].[AddStone] @GameId = 3, @Row = 8, @Column = 7, @Color = 1;
+EXECUTE [dbo].[AddStone] @GameId = 3, @Row = 6, @Column = 7, @Color = 0;
+
 EXECUTE [dbo].[AddStone] @GameId = 3, @Row = 7, @Column = 6, @Color = 1;
+EXECUTE [dbo].[AddStone] @GameId = 3, @Row = 6, @Column = 6, @Color = 1;
+EXECUTE [dbo].[AddStone] @GameId = 3, @Row = 7, @Column = 5, @Color = 1;
+EXECUTE [dbo].[AddStone] @GameId = 3, @Row = 7, @Column = 8, @Color = 1;
+EXECUTE [dbo].[AddStone] @GameId = 3, @Row = 6, @Column = 8, @Color = 1;
