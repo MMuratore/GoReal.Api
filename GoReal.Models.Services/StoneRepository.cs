@@ -10,7 +10,7 @@ namespace GoReal.Models.Services
 {
     public class StoneRepository : IStoneRepository<Stone>
     {
-        private Connection _connection;
+        private readonly Connection _connection;
 
         public StoneRepository(Connection connection)
         {
@@ -19,7 +19,7 @@ namespace GoReal.Models.Services
 
         public IEnumerable<Stone> Get(int gameId)
         {
-            Command cmd = new Command("GetBoard", true);
+            Command cmd = new Command("GetStone", true);
             cmd.AddParameter("GameId", gameId);
 
             return _connection.ExecuteReader(cmd, (dr) => dr.ToStone());

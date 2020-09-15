@@ -8,6 +8,7 @@ namespace GoReal.Common.Interfaces
     public interface IUserRepository<TUser>
     {
         IEnumerable<TUser> Get();
+        TUser Get(int userId);
         UserResult Update(int userId, TUser user);
         bool Delete(int userId);
         bool DeleteAdmin(int userId);

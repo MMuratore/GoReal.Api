@@ -4,13 +4,14 @@ using GoReal.Models.Entities;
 using GoReal.Models.Services.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Tools.Databases;
 
 namespace GoReal.Models.Services
 {
     public class UserRepository : IUserRepository<User>
     {
-        private Connection _connection;
+        private readonly Connection _connection;
 
         public UserRepository(Connection connection)
         {
@@ -22,6 +23,14 @@ namespace GoReal.Models.Services
             Command cmd = new Command("UserGetAll", true);
 
             return _connection.ExecuteReader(cmd, (dr) => dr.ToUser());
+        }
+
+        public User Get(int userId)
+        {
+            Command cmd = new Command("UserGet", true);
+            cmd.AddParameter("UserId", userId);
+
+            return _connection.ExecuteReader(cmd, (dr) => dr.ToUser()).SingleOrDefault();
         }
 
         public UserResult Update(int userId, User user)

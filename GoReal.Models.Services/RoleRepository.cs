@@ -13,7 +13,7 @@ namespace GoReal.Models.Services
 {
     public class RoleRepository : IRoleRepository<Role>
     {
-        private Connection _connection;
+        private readonly Connection _connection;
 
         public RoleRepository(Connection connection)
         {

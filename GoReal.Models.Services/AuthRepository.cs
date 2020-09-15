@@ -12,7 +12,7 @@ namespace GoReal.Models.Services
 {
     public class AuthRepository : IAuthRepository<User>
     {
-        private Connection _connection;
+        private readonly Connection _connection;
 
         public AuthRepository(Connection connection)
         {
