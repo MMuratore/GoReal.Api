@@ -33,7 +33,15 @@ namespace GoReal.Models.Services
             cmd.AddParameter("Column", entity.Column);
             cmd.AddParameter("Color", entity.Color);
 
-            return _connection.ExecuteNonQuery(cmd) == 1;
+            try
+            {
+                _connection.ExecuteNonQuery(cmd);
+            }
+            catch (Exception e)
+            {
+                if (e.Message.Contains("PK_Stone")) return false;
+            }
+            return true;
         }
 
         public bool DeleteStone(int gameId, Stone entity)

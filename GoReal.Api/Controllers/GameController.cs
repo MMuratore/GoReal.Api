@@ -110,7 +110,10 @@ namespace GoReal.Api.Controllers
             foreach (D.Stone stone in newBoard.StoneDiff)
             {
                 if (stone.Color is null) _stoneService.DeleteStone(id, stone);
-                else _stoneService.AddStone(id, stone);
+                else
+                {
+                    if (!_stoneService.AddStone(id, stone)) return BadRequest();
+                }
             }
 
             return Ok(newBoard.Diff());

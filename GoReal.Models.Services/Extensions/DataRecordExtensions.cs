@@ -58,7 +58,10 @@ namespace GoReal.Models.Services.Extensions
             return new Entities.Rule()
             {
                 Id = (int)Dr["RuleId"],
-                RuleName = (string)Dr["RuleName"]
+                RuleName = (string)Dr["RuleName"],
+                Overwrite = (bool)Dr["Overwrite"],
+                Suicide = (bool)Dr["Suicide"],
+                Ko = (bool)Dr["Ko"]
             };
         }
 
