@@ -1,12 +1,9 @@
 ﻿using GoReal.Models.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using D = GoReal.Models.Entities;
 
 namespace GoReal.Models.Api.Mappers
 {
-    public static class EntitiesMappers
+    public static class UserMappers
     {
         public static User ToClient(this D.User entity)
         {

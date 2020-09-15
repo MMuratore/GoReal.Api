@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using D = GoReal.Models.Entities;
+using System;
 
-namespace GoReal.Models.Entities
+namespace GoReal.Models.Api
 {
     public class Game
     {
@@ -17,9 +16,10 @@ namespace GoReal.Models.Entities
         public int? BlackCapture { get; set; }
         public int? WhiteCapture { get; set; }
         public string KoInfo { get; set; }
-        public int TimeControlId { get; set; }
-        public int RuleId { get; set; }
-        public int BlackPlayerId { get; set; }
-        public int WhitePlayerId { get; set; }
+        public D.TimeControl TimeControl { get; set; }
+        public D.Rule Rule { get; set; }
+        public User BlackPlayer { get; set; }
+        public User WhitePlayer { get; set; }
+        public Board Board { get; set; }
     }
 }
