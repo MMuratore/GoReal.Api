@@ -65,7 +65,9 @@
     <Folder Include="Procedures\Role" />
     <Folder Include="Tables\Game" />
     <Folder Include="Procedures\Game" />
-    <Folder Include="Procedures\Game\Stone" />
+    <Folder Include="Procedures\TimeControl" />
+    <Folder Include="Procedures\Rule" />
+    <Folder Include="Procedures\Stone" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Functions\GetPostSalt.sql" />
@@ -89,12 +91,14 @@
     <Build Include="Tables\Game\TimeControl.sql" />
     <Build Include="Tables\Game\Stone.sql" />
     <Build Include="Procedures\Game\GameCreate.sql" />
-    <Build Include="Procedures\Game\RuleCreate.sql" />
-    <Build Include="Procedures\Game\TimeControlCreate.sql" />
     <Build Include="Functions\GetPlayerRanking.sql" />
-    <Build Include="Procedures\Game\Stone\GetStone.sql" />
-    <Build Include="Procedures\Game\Stone\AddStone.sql" />
-    <Build Include="Procedures\Game\Stone\DeleteStone.sql" />
+    <Build Include="Procedures\Game\GameGet.sql" />
+    <Build Include="Procedures\TimeControl\TimeControlCreate.sql" />
+    <Build Include="Procedures\Rule\RuleCreate.sql" />
+    <Build Include="Procedures\Stone\AddStone.sql" />
+    <Build Include="Procedures\Stone\DeleteStone.sql" />
+    <Build Include="Procedures\Stone\GetStone.sql" />
+    <Build Include="Procedures\User\UserGet.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
