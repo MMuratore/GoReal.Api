@@ -17,8 +17,8 @@ namespace GoReal.Api.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        IAuthRepository<D.User> _authService;
-        ITokenService _tokenService;
+        private readonly IAuthRepository<D.User> _authService;
+        private readonly ITokenService _tokenService;
 
         public AuthController(ITokenService TokenService, IAuthRepository<D.User> AuthService)
         {

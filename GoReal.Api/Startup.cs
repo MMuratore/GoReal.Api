@@ -54,8 +54,12 @@ namespace GoReal.Api
 
             services.AddSingleton<IAuthRepository<User>, AuthRepository>();
             services.AddSingleton<IUserRepository<User>, UserRepository>();
-            services.AddSingleton<IStoneRepository<Stone>, StoneRepository>();
             services.AddSingleton<IRoleRepository<Role>, RoleRepository>();
+
+            services.AddSingleton<IRepository<Game>, GameRepository>();
+            services.AddSingleton<IRepository<Rule>, RuleRepository>();
+            services.AddSingleton<IRepository<TimeControl>, TimeControlRepository>();
+            services.AddSingleton<IStoneRepository<Stone>, StoneRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

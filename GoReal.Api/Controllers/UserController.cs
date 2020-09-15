@@ -20,8 +20,8 @@ namespace GoReal.Api.Controllers
     [AuthRequired]
     public class UserController : ControllerBase
     {
-        IUserRepository<D.User> _userService;
-        ITokenService _tokenService;
+        private readonly IUserRepository<D.User> _userService;
+        private readonly ITokenService _tokenService;
 
         public UserController(IUserRepository<D.User> UserService, ITokenService TokenService)
         {
@@ -38,6 +38,16 @@ namespace GoReal.Api.Controllers
                 return Problem(((int)UserResult.Failed).ToString(), statusCode: (int)HttpStatusCode.NotFound);
 
             return Ok(users);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            User user = _userService.Get(id).ToClient();
+            if (user is null)
+                return Problem(((int)UserResult.Failed).ToString(), statusCode: (int)HttpStatusCode.NotFound);
+
+            return Ok(user);
         }
 
         [HttpPut("{id}")]
@@ -64,7 +74,7 @@ namespace GoReal.Api.Controllers
 
         [HttpPatch("{id}")]
         [AuthRequired(D.Role.SuperAdministrator)]
-        public IActionResult Patch(int id, [FromBody] UserPatchForm form)
+        public IActionResult Patch(int id, [FromBody] PatchForm form)
         {
             if(string.Equals(form.Action,"activate"))
             {

@@ -15,7 +15,7 @@ namespace GoReal.Api.Controllers
     [AuthRequired(Role.SuperAdministrator)]
     public class RoleController : ControllerBase
     {
-        IRoleRepository<Role> _roleService;
+        private readonly IRoleRepository<Role> _roleService;
 
         public RoleController(IRoleRepository<Role> RoleService)
         {
