@@ -3,9 +3,10 @@ using System.Collections.Generic;
 
 namespace GoReal.Common.Interfaces
 {
-    public interface IRepository<Tentity>
+    public interface IRepository<TEntity, TResult>
     {
-        bool Create(Tentity entity);
-        Tentity Get(int id);
+        bool Create(TEntity entity);
+        TEntity Get(int id);
+        TResult Update(int id, TEntity entity);
     }
 }

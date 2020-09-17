@@ -1,5 +1,6 @@
 using GoReal.Api.Infrastrucutre.Configuration;
 using GoReal.Common.Interfaces;
+using GoReal.Common.Interfaces.Enumerations;
 using GoReal.Models.Entities;
 using GoReal.Models.Services;
 using Microsoft.AspNetCore.Builder;
@@ -56,9 +57,9 @@ namespace GoReal.Api
             services.AddSingleton<IUserRepository<User>, UserRepository>();
             services.AddSingleton<IRoleRepository<Role>, RoleRepository>();
 
-            services.AddSingleton<IRepository<Game>, GameRepository>();
-            services.AddSingleton<IRepository<Rule>, RuleRepository>();
-            services.AddSingleton<IRepository<TimeControl>, TimeControlRepository>();
+            services.AddSingleton<IRepository<Game, GameResult>, GameRepository>();
+            services.AddSingleton<IRepository<Rule, RuleResult>, RuleRepository>();
+            services.AddSingleton<IRepository<TimeControl, TimeControlResult>, TimeControlRepository>();
             services.AddSingleton<IStoneRepository<Stone>, StoneRepository>();
         }
 

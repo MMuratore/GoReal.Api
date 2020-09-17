@@ -25,7 +25,7 @@ namespace GoReal.Models.Services
             return _connection.ExecuteReader(cmd, (dr) => dr.ToStone());
         }
 
-        public bool AddStone(int gameId, Stone entity)
+        public GameResult AddStone(int gameId, Stone entity)
         {
             Command cmd = new Command("AddStone", true);
             cmd.AddParameter("GameId", gameId);
@@ -39,9 +39,9 @@ namespace GoReal.Models.Services
             }
             catch (Exception e)
             {
-                if (e.Message.Contains("PK_Stone")) return false;
+                if (e.Message.Contains("PK_Stone")) return GameResult.PreventOverwrite;
             }
-            return true;
+            return GameResult.ValidMove;
         }
 
         public bool DeleteStone(int gameId, Stone entity)

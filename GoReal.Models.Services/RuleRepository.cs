@@ -1,4 +1,5 @@
 ﻿using GoReal.Common.Interfaces;
+using GoReal.Common.Interfaces.Enumerations;
 using GoReal.Models.Entities;
 using GoReal.Models.Services.Extensions;
 using System.Linq;
@@ -6,7 +7,7 @@ using Tools.Databases;
 
 namespace GoReal.Models.Services
 {
-    public class RuleRepository : IRepository<Rule>
+    public class RuleRepository : IRepository<Rule, RuleResult>
     {
         private readonly Connection _connection;
 
@@ -30,6 +31,11 @@ namespace GoReal.Models.Services
             cmd.AddParameter("RuleName", entity.RuleName);
 
             return _connection.ExecuteNonQuery(cmd) == 1;
+        }
+
+        public RuleResult Update(int id, Rule entity)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -11,7 +11,7 @@ using Tools.Databases;
 
 namespace GoReal.Models.Services
 {
-    public class TimeControlRepository : IRepository<TimeControl>
+    public class TimeControlRepository : IRepository<TimeControl, TimeControlResult>
     {
         private readonly Connection _connection;
 
@@ -40,6 +40,11 @@ namespace GoReal.Models.Services
             cmd.AddParameter("InitialTime", entity.InitialTime);
 
             return _connection.ExecuteNonQuery(cmd) == 1;
+        }
+
+        public TimeControlResult Update(int id, TimeControl entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using GoReal.Models.Api.Forms;
+﻿using GoReal.Common.Interfaces.Enumerations;
+using GoReal.Models.Api.Helpers;
 using GoReal.Models.Entities;
 using System;
 using System.Collections.Generic;
@@ -9,49 +10,45 @@ namespace GoReal.Models.Api
     public class Board
     {
         public bool?[][] StoneMap { get; set; }
-        public int Height { get; set; }
-        public int Width { get; set; }
-        public int?[] Capture { get; set; }
+        public Stone KoInfo { get; set; }
+        
+        private int Height { get; set; }
+        private int Width { get; set; }
+        private Dictionary<bool, int> Capture { get; set; }
+        private Dictionary<User, bool> Player { get; set; }
 
-        public List<bool> Action { get; set; }
-        public List<Stone> StoneDiff { get; set; }
-
-        private bool[] Player { get; set; }
-        private Stone KoInfo { get; set; }
-
-        public Board(bool?[][] stoneMap)
+        public Board(List<Stone> stones, int height, int width, User blackPlayer, User whitePlayer)
         {
-            this.StoneMap = stoneMap;
-            this.Height = StoneMap.GetLength(0);
-            this.Width = StoneMap[1].GetLength(0);
-            this.Capture = new int?[] { null, null };
-            this.Player = new bool[] { true, false };
-            this.KoInfo = new Stone();
-            this.StoneDiff = new List<Stone>();
-            this.Action = new List<bool>();
-
-            foreach (bool?[] row in StoneMap)
-            {
-                if (row.Length != Width)
-                    throw new ArgumentException(nameof(stoneMap));
-            }
+            StoneMap = JaggedArray.InitalizeStoneMap(height, width, stones);
+            KoInfo = new Stone();
+            Height = height;
+            Width = width;
+            Capture = new Dictionary<bool, int> { { true, 0 }, { false, 0 } };
+            Player = new Dictionary<User, bool> { { whitePlayer, true }, { blackPlayer, false } };
         }
 
-        public Board MakeMove(Stone stone, bool preventSuicide = false, bool preventOverwrite = false, bool preventKo = false)
+        public Board(List<Stone> stones, int height, int width, User blackPlayer, User whitePlayer, int blackCapture, int witheCapture, Stone koInfo) 
+            : this(stones, height, width, blackPlayer, whitePlayer)
+        {
+            Capture = new Dictionary<bool, int> { { true, witheCapture }, { false, blackCapture } };
+            KoInfo = koInfo;
+        }
+
+        public (Board board, GameResult result) MakeMove(Stone stone, bool preventSuicide = false, bool preventOverwrite = false, bool preventKo = false)
         {
 
             Board move = Clone();
 
             if (!Has(stone))
-                return move;
+                return (move, GameResult.PointNotExist);
 
             if (preventOverwrite && !(Get(stone) is null))
-                throw new ArgumentException("Overwrite prevented");
+                return (move, GameResult.PreventOverwrite);
 
             if (preventKo && KoInfo.Color == stone.Color && VertexEquals(KoInfo, stone))
-                throw new ArgumentException("Ko prevented");
+                return (move, GameResult.PreventKo);
 
-            move.Set(stone);
+            move = Set(move, stone);
 
             // Remove captured stones
 
@@ -68,7 +65,7 @@ namespace GoReal.Models.Api
                 foreach (Stone removeStone in deadChain)
                 {
                     removeStone.Color = null;
-                    move.Set(removeStone).SetCaptures(stone.Color, null, x => x + 1);
+                    move = Set(move, removeStone).SetCaptures(Player.First(x => x.Value == stone.Color).Key, x => x + 1);
                     deadStones.Add(removeStone);
                 }
             }
@@ -90,16 +87,16 @@ namespace GoReal.Models.Api
             if (deadStones.Count() == 0 && liberties.Count() == 0)
             {
                 if (preventSuicide)
-                    throw new ArgumentException("Suicide preventedd");
+                    return (this, GameResult.PreventSuicide);
 
                 foreach (Stone suicide in move.GetChain(stone))
                 {
                     suicide.Color = null;
-                    move.Set(suicide).SetCaptures(!stone.Color, null, x => x + 1);
+                    move = Set(move, suicide).SetCaptures(Player.First(x => x.Value == !stone.Color).Key, x => x + 1);
                 }
             }
 
-            return move;
+            return (move, GameResult.ValidMove);
         }
         /*
         public List<Stone> GetHandicapPlacement(int count, bool tygem = false)
@@ -155,7 +152,7 @@ namespace GoReal.Models.Api
 
         public bool IsValid()
         {
-            bool?[][] liberties = InitalizeStoneMap(Width, Height);
+            bool?[][] liberties = JaggedArray.InitalizeStoneMap(Width, Height);
 
             for (int x = 0; x < Width; x++)
             {
@@ -173,79 +170,104 @@ namespace GoReal.Models.Api
             return true;
         }
 
-        public DiffForm Diff()
+        public MoveResult Diff(Board board)
         {
+            if (board.Width != Width || board.Height != Height)
+                return null;
 
-            DiffForm diffForm = new DiffForm();
-            diffForm.Action = new List<bool>(Action);
-            diffForm.Stones = new List<Stone>(StoneDiff);
-            Action.Clear();
-            StoneDiff.Clear();
-            diffForm.BlackCapture = GetCaptures(true);
-            diffForm.WhiteCapture = GetCaptures(false);
-            diffForm.KoInfo = KoInfo;
+            MoveResult result = new MoveResult();
 
-            return diffForm;
+            for (int x = 0; x < Width; x++)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    Stone stone = new Stone() { Row = x, Column = y, Color = null };
+                    stone.Color = board.Get(stone);
+                    if (Get(stone) != stone.Color) result.Stones.Add(stone);
+                }
+            }
+
+            result.BlackCapture = board.GetCaptures(Player.First(x => x.Value == false).Key);
+            result.WhiteCapture = board.GetCaptures(Player.First(x => x.Value == true).Key);
+            result.KoInfo = board.KoInfo;
+
+            return result;
         }
 
-        public bool? Get(Stone stone)
+        private bool? Get(Stone stone)
         {
             return StoneMap[stone.Column]?[stone.Row];
         }
 
-        public Board Set(Stone stone)
+        private Board Set(Board board, Stone stone)
         {
-            if (Has(stone))
+            if (board.Has(stone))
             {
-                StoneMap[stone.Column][stone.Row] = stone.Color;
-                StoneDiff.Add(stone);
-                if (stone.Color is null) Action.Add(false);
-                else Action.Add(true);
+                board.StoneMap[stone.Column][stone.Row] = stone.Color;
             }
 
-            return this;
+            return board;
         }
 
-        public bool Has(Stone stone)
+        private bool Has(Stone stone)
         {
             return (0 <= stone.Row) && (stone.Row < Width) && (0 <= stone.Column) && (stone.Column < Height);
         }
 
-        public Board Clone()
+        private Board Clone()
         {
-            Board result = new Board(StoneMap)
-                .SetCaptures(true, GetCaptures(true))
-                .SetCaptures(false, GetCaptures(false));
+            Board result = new Board(GetStones(), Height, Width, Player.First(x => x.Value == false).Key, Player.First(x => x.Value == true).Key)
+                .SetCaptures(Player.First(x => x.Value == true).Key, GetCaptures(Player.First(x => x.Value == true).Key))
+                .SetCaptures(Player.First(x => x.Value == false).Key, GetCaptures(Player.First(x => x.Value == false).Key));
 
             result.KoInfo = KoInfo;
 
             return result;
         }
 
-        public int? GetCaptures(bool player)
+        private List<Stone> GetStones()
         {
-            int index = Array.IndexOf(Player, player);
-            if (index < 0) return null;
+            List<Stone> result = new List<Stone>();
 
-            return Capture[index];
+            for (int x = 0; x < Width; x++)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    Stone stone = new Stone() { Row = x, Column = y, Color = null };
+                    stone.Color = Get(stone);
+
+                    result.Add(stone);
+                }
+            }
+
+            return result;
         }
 
-        public Board SetCaptures(bool? player, int? capture = null, Func<int?, int?> mutator = null)
+        public int GetCaptures(User player)
         {
-            int index = Array.IndexOf(Player, player);
+            return Capture[Player[player]];
+        }
 
-            if (index >= 0)
-                Capture[index] = !(mutator is null) ? mutator(Capture[index]) : capture;
+        public Board SetCaptures(User player, int capture)
+        {
+            Capture[Player[player]] = capture;
 
             return this;
         }
 
-        public bool VertexEquals(Stone stone1, Stone stone2)
+        private Board SetCaptures(User player, Func<int, int> mutator = null)
+        {
+            Capture[Player[player]] = !(mutator is null) ? mutator(Capture[Player[player]]) : Capture[Player[player]];
+
+            return this;
+        }
+
+        private bool VertexEquals(Stone stone1, Stone stone2)
         {
             return stone1.Row == stone2.Row && stone1.Column == stone2.Column;
         }
 
-        public List<Stone> GetNeighbors(Stone stone)
+        private List<Stone> GetNeighbors(Stone stone)
         {
             if (!Has(stone)) return null;
             int x = stone.Row;
@@ -264,11 +286,11 @@ namespace GoReal.Models.Api
             return neighbors;
         }
 
-        public bool HasLiberties(Stone stone, bool?[][] visitedParam = null)
+        private bool HasLiberties(Stone stone, bool?[][] visitedParam = null)
         {
             if (!Has(stone)) return false;
 
-            bool?[][] visited = visitedParam ?? InitalizeStoneMap(Width, Height);
+            bool?[][] visited = visitedParam ?? JaggedArray.InitalizeStoneMap(Width, Height);
 
             if (!(visited[stone.Column][stone.Row] is null)) return false;
 
@@ -282,12 +304,12 @@ namespace GoReal.Models.Api
             return neighbors.Where(n => Get(n) == stone.Color).Any(n => HasLiberties(n, visited));
         }
 
-        public List<Stone> GetChain(Stone stone)
+        private List<Stone> GetChain(Stone stone)
         {
             return GetConnectedComponent(stone, v => Get(v) == stone.Color);
         }
 
-        public List<Stone> GetConnectedComponent(Stone stone, Func<Stone, bool> predicate, List<Stone> result = null)
+        private List<Stone> GetConnectedComponent(Stone stone, Func<Stone, bool> predicate, List<Stone> result = null)
         {
             if (!Has(stone)) return null;
             if (result is null)
@@ -309,13 +331,13 @@ namespace GoReal.Models.Api
             return result;
         }
 
-        public List<Stone> GetLiberties(Stone stone)
+        private List<Stone> GetLiberties(Stone stone)
         {
             if (!Has(stone) || Get(stone) is null) return null;
 
             List<Stone> chain = GetChain(stone);
             List<Stone> liberties = new List<Stone>();
-            bool?[][] added = InitalizeStoneMap(Width, Height);
+            bool?[][] added = JaggedArray.InitalizeStoneMap(Width, Height);
 
             foreach (Stone libertie in chain)
             {
@@ -327,15 +349,6 @@ namespace GoReal.Models.Api
 
             return liberties;
         }
-
-        private bool?[][] InitalizeStoneMap(int width, int height)
-        {
-            bool?[][] map = new bool?[width][];
-            for (int i = 0; i < width; i++)
-            {
-                map[i] = new bool?[height];
-            }
-            return map;
-        }
     }
+    
 }
