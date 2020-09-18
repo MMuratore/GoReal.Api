@@ -1,9 +1,6 @@
 ﻿using GoReal.Models.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace GoReal.Models.Api.Mappers
+namespace GoReal.Services.Api.Mappers
 {
     public static class KoInfoMappers
     {

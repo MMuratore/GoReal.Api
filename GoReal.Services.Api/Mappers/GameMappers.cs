@@ -1,7 +1,7 @@
-﻿using GoReal.Models.Entities;
+﻿using GoReal.Models.Api;
 using D = GoReal.Models.Entities;
 
-namespace GoReal.Models.Api.Mappers
+namespace GoReal.Services.Api.Mappers
 {
     public static class GameMappers
     {
@@ -22,8 +22,8 @@ namespace GoReal.Models.Api.Mappers
                 BlackState = entity.BlackState,
                 WhiteState = entity.WhiteState,
                 KoInfo = entity.KoInfo,
-                TimeControl = new TimeControl() { Id = entity.TimeControlId },
-                Rule = new Rule() { Id = entity.RuleId },
+                TimeControl = new D.TimeControl() { Id = entity.TimeControlId },
+                Rule = new D.Rule() { Id = entity.RuleId },
                 BlackPlayer = new User() { UserId = entity.BlackPlayerId },
                 WhitePlayer = new User() { UserId = entity.WhitePlayerId },
             };

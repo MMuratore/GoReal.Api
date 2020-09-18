@@ -3,9 +3,9 @@ using GoReal.Common.Interfaces;
 using GoReal.Common.Interfaces.Enumerations;
 using Microsoft.AspNetCore.Mvc;
 using GoReal.Models.Entities;
-using GoReal.Models.Api.Forms;
 using GoReal.Api.Infrastrucutre;
 using Microsoft.AspNetCore.Cors;
+using GoReal.Models.Api.DataTransfertObject;
 
 namespace GoReal.Api.Controllers
 {

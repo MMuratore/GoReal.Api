@@ -13,6 +13,7 @@
     <ProjectReference Include="..\GoReal.Common.Interfaces\GoReal.Common.Interfaces.csproj" />
     <ProjectReference Include="..\GoReal.Models.Api\GoReal.Models.Api.csproj" />
     <ProjectReference Include="..\GoReal.Models.Services\GoReal.Models.Services.csproj" />
+    <ProjectReference Include="..\GoReal.Services.Api\GoReal.Services.Api.csproj" />
   </ItemGroup>
 
 

@@ -6,9 +6,9 @@ using GoReal.Models.Api;
 using D = GoReal.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Tools.Security.Token;
-using GoReal.Models.Api.Mappers;
-using GoReal.Models.Api.Forms;
 using Microsoft.AspNetCore.Cors;
+using GoReal.Services.Api.Mappers;
+using GoReal.Models.Api.DataTransfertObject;
 
 namespace GoReal.Api.Controllers
 {

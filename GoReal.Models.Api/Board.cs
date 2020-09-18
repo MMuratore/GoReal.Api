@@ -1,9 +1,11 @@
 ﻿using GoReal.Common.Interfaces.Enumerations;
-using GoReal.Models.Api.Helpers;
 using GoReal.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GoReal.Models.Api.Helpers;
+using GoReal.Models.Api.Exceptions;
+using GoReal.Models.Api.DataTransfertObject;
 
 namespace GoReal.Models.Api
 {
@@ -34,19 +36,19 @@ namespace GoReal.Models.Api
             KoInfo = koInfo;
         }
 
-        public (Board board, GameResult result) MakeMove(Stone stone, bool preventSuicide = false, bool preventOverwrite = false, bool preventKo = false)
+        public Board MakeMove(Stone stone, bool preventSuicide = false, bool preventOverwrite = false, bool preventKo = false)
         {
 
             Board move = Clone();
 
             if (!Has(stone))
-                return (move, GameResult.PointNotExist);
+                throw new GameException(GameResult.PointNotExist, "Point do not exist");
 
             if (preventOverwrite && !(Get(stone) is null))
-                return (move, GameResult.PreventOverwrite);
+                throw new GameException(GameResult.PreventOverwrite, "Prevent Overwrite");
 
             if (preventKo && KoInfo.Color == stone.Color && VertexEquals(KoInfo, stone))
-                return (move, GameResult.PreventKo);
+                throw new GameException(GameResult.PreventKo, "Prevent Ko");
 
             move = Set(move, stone);
 
@@ -87,7 +89,7 @@ namespace GoReal.Models.Api
             if (deadStones.Count() == 0 && liberties.Count() == 0)
             {
                 if (preventSuicide)
-                    return (this, GameResult.PreventSuicide);
+                    throw new GameException(GameResult.PreventSuicide, "Prevent Suicide");
 
                 foreach (Stone suicide in move.GetChain(stone))
                 {
@@ -96,7 +98,7 @@ namespace GoReal.Models.Api
                 }
             }
 
-            return (move, GameResult.ValidMove);
+            return move;
         }
         /*
         public List<Stone> GetHandicapPlacement(int count, bool tygem = false)

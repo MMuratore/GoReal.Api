@@ -1,7 +1,7 @@
-﻿using GoReal.Models.Entities;
+﻿using GoReal.Models.Api;
 using D = GoReal.Models.Entities;
 
-namespace GoReal.Models.Api.Mappers
+namespace GoReal.Services.Api.Mappers
 {
     public static class UserMappers
     {
@@ -16,7 +16,7 @@ namespace GoReal.Models.Api.Mappers
                 Email = entity.Email,
                 isActive = entity.isActive,
                 isBan = entity.isBan,
-                Roles = (Role)entity.Roles
+                Roles = (D.Role)entity.Roles
             };
         }
         public static D.User ToDal(this User entity)

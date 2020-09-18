@@ -15,6 +15,7 @@ namespace GoReal.Common.Interfaces.Enumerations
         GameNotExist,
         GameFinished,
         BoardNotValid,
+        OtherPlayerTurn,
         Failed
     }
 }

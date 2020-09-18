@@ -3,6 +3,7 @@ using GoReal.Common.Interfaces;
 using GoReal.Common.Interfaces.Enumerations;
 using GoReal.Models.Entities;
 using GoReal.Models.Services;
+using GoReal.Services.Api;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -57,10 +58,7 @@ namespace GoReal.Api
             services.AddSingleton<IUserRepository<User>, UserRepository>();
             services.AddSingleton<IRoleRepository<Role>, RoleRepository>();
 
-            services.AddSingleton<IRepository<Game, GameResult>, GameRepository>();
-            services.AddSingleton<IRepository<Rule, RuleResult>, RuleRepository>();
-            services.AddSingleton<IRepository<TimeControl, TimeControlResult>, TimeControlRepository>();
-            services.AddSingleton<IStoneRepository<Stone>, StoneRepository>();
+            services.AddSingleton<GameService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

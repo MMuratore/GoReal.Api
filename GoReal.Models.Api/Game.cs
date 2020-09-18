@@ -1,5 +1,6 @@
 ﻿using D = GoReal.Models.Entities;
 using System;
+using GoReal.Common.Interfaces.Enumerations;
 
 namespace GoReal.Models.Api
 {

@@ -45,8 +45,11 @@ namespace GoReal.Models.Services
         {
             Command cmd = new Command("GameUpdate", true);
             cmd.AddParameter("GameId", id);
+            cmd.AddParameter("Result", entity.Result);
             cmd.AddParameter("BlackCapture", entity.BlackCapture);
             cmd.AddParameter("WhiteCapture", entity.WhiteCapture);
+            cmd.AddParameter("BlackState", entity.BlackState);
+            cmd.AddParameter("WhiteState", entity.WhiteState);
             cmd.AddParameter("KoInfo", entity.KoInfo);
 
             if( _connection.ExecuteNonQuery(cmd) == 1) 
