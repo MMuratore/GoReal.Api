@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Tools.Databases\Tools.Databases.csproj" />
+    <ProjectReference Include="..\GoReal.Common\GoReal.Common.csproj" />
+    <ProjectReference Include="..\GoReal.Dal.Entities\GoReal.Dal.Entities.csproj" />
+  </ItemGroup>
+
+</Project>

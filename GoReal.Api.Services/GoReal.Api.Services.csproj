@@ -1,19 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Tools.Databases\Tools.Databases.csproj" />
     <ProjectReference Include="..\..\Tools.Security.Token\Tools.Security.Token.csproj" />
-    <ProjectReference Include="..\GoReal.Api.Services\GoReal.Api.Services.csproj" />
+    <ProjectReference Include="..\GoReal.Api.Models\GoReal.Api.Models.csproj" />
     <ProjectReference Include="..\GoReal.Dal.Services\GoReal.Dal.Repository.csproj" />
   </ItemGroup>
-
 
 </Project>

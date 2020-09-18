@@ -1,14 +1,15 @@
 ﻿using System.Net;
 using System.Security.Claims;
-using GoReal.Common.Interfaces;
-using GoReal.Common.Interfaces.Enumerations;
-using GoReal.Models.Api;
-using D = GoReal.Models.Entities;
+using D = GoReal.Dal.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Tools.Security.Token;
 using Microsoft.AspNetCore.Cors;
-using GoReal.Services.Api.Mappers;
-using GoReal.Models.Api.DataTransfertObject;
+using GoReal.Common.Exceptions;
+using GoReal.Common.Exceptions.Enumerations;
+using GoReal.Dal.Repository.Interfaces;
+using GoReal.Api.Models.Forms;
+using GoReal.Api.Models;
+using GoReal.Api.Services.Mappers;
 
 namespace GoReal.Api.Controllers
 {
@@ -30,48 +31,55 @@ namespace GoReal.Api.Controllers
         [Route("login")]
         public IActionResult Login([FromBody] LoginForm form)
         {
-            var results = _authService.Login(form.Email, form.Password);
-            User user = results.Item1?.ToClient();
+            User user = new User();
 
-            switch (results.Item2)
+            try
             {
-                case UserResult.Login:
-                    user.Token = _tokenService.EncodeToken(user, user => new Claim[] {
-                        new Claim("UserId", user.UserId.ToString()),
-                        new Claim("GoTag", user.GoTag),
-                        new Claim("LastName", user.LastName),
-                        new Claim("FirstName", user.FirstName),
-                        new Claim("Email", user.Email),
-                        new Claim("Roles", ((int)user.Roles).ToString())
-                    });
-                    return Ok(user);
-                case UserResult.Ban:
-                    return Problem(((int)UserResult.Ban).ToString(), statusCode: (int)HttpStatusCode.NotFound);
-                case UserResult.Inactive:
-                    return Problem(((int)UserResult.Inactive).ToString(), statusCode: (int)HttpStatusCode.NotFound);
-                default:
-                    break;
+                user = _authService.Login(form.Email, form.Password)?.ToClient();
             }
-            
-            return NotFound();
+            catch (UserException exception)
+            {
+                return exception.Result switch
+                {
+                    UserResult.Ban => Problem(((int)UserResult.Ban).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
+                    UserResult.Inactive => Problem(((int)UserResult.Inactive).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
+                    _ => NotFound(),
+                };
+            }
+
+            if (user is null) return NotFound();
+
+            user.Token = _tokenService.EncodeToken(user, user => new Claim[] {
+                new Claim("UserId", user.UserId.ToString()),
+                new Claim("GoTag", user.GoTag),
+                new Claim("LastName", user.LastName),
+                new Claim("FirstName", user.FirstName),
+                new Claim("Email", user.Email),
+                new Claim("Roles", ((int)user.Roles).ToString())
+            });
+
+            return Ok(user);
         }
 
         [HttpPost]
         [Route("register")]
         public IActionResult Register([FromBody] User user)
         {
-            switch (_authService.Register(user.ToDal()))
+            try
             {
-                case UserResult.Register:
-                    return Ok();
-                case UserResult.GoTagNotUnique:
-                    return Problem(((int)UserResult.GoTagNotUnique).ToString(), statusCode: (int)HttpStatusCode.BadRequest);
-                case UserResult.EmailNotUnique:
-                    return Problem(((int)UserResult.EmailNotUnique).ToString(), statusCode: (int)HttpStatusCode.BadRequest);
-                default:
-                    break;
+                if (!_authService.Register(user?.ToDal())) return NotFound();
             }
-            return NotFound();
+            catch (UserException exception)
+            {
+                return exception.Result switch
+                {
+                    UserResult.GoTagNotUnique => Problem(((int)UserResult.GoTagNotUnique).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
+                    UserResult.EmailNotUnique => Problem(((int)UserResult.EmailNotUnique).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
+                    _ => NotFound(),
+                };
+            }
+
+            return Ok();
         }
     }
 }

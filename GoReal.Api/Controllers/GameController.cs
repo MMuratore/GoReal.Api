@@ -1,17 +1,13 @@
-﻿using System.Linq;
-using GoReal.Common.Interfaces;
-using GoReal.Models.Api;
-using D = GoReal.Models.Entities;
+﻿using D = GoReal.Dal.Entities;
 using Microsoft.AspNetCore.Mvc;
 using GoReal.Api.Infrastrucutre;
 using Microsoft.AspNetCore.Cors;
-using System.Collections.Generic;
-using GoReal.Common.Interfaces.Enumerations;
 using System.Net;
-using System;
-using GoReal.Services.Api;
-using GoReal.Models.Api.Exceptions;
-using GoReal.Models.Api.DataTransfertObject;
+using GoReal.Api.Services;
+using GoReal.Api.Models.DataTransfertObject;
+using GoReal.Common.Exceptions.Enumerations;
+using GoReal.Common.Exceptions;
+using GoReal.Api.Models;
 
 namespace GoReal.Api.Controllers
 {
@@ -39,11 +35,11 @@ namespace GoReal.Api.Controllers
             }
             catch (GameException gameException)
             {
-                return gameException.GameResult switch
+                return gameException.Result switch
                 {
                     GameResult.GameNotExist => Problem(((int)GameResult.GameNotExist).ToString(), statusCode: (int)HttpStatusCode.NotFound),
                     GameResult.BoardNotValid => Problem(((int)GameResult.BoardNotValid).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
-                    _ => Problem(((int)GameResult.Failed).ToString(), statusCode: (int)HttpStatusCode.NotFound),
+                    _ => NotFound(),
                 };
             }
             return Ok(game);
@@ -52,10 +48,9 @@ namespace GoReal.Api.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] Game game)
         {
-            if (_gameService.Create(game))
-                return Ok();
+            if (!_gameService.Create(game)) return BadRequest();
 
-            return Problem(((int)GameResult.Failed).ToString(), statusCode: (int)HttpStatusCode.NotFound);
+            return Ok();
         }
 
         [HttpPut("{id}")]
@@ -69,7 +64,7 @@ namespace GoReal.Api.Controllers
             }
             catch (GameException gameException)
             {
-                return gameException.GameResult switch
+                return gameException.Result switch
                 {
                     GameResult.GameNotExist => Problem(((int)GameResult.GameNotExist).ToString(), statusCode: (int)HttpStatusCode.NotFound),
                     GameResult.GameFinished => Problem(((int)GameResult.GameFinished).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
@@ -78,7 +73,7 @@ namespace GoReal.Api.Controllers
                     GameResult.PreventOverwrite => Problem(((int)GameResult.PreventOverwrite).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
                     GameResult.PreventSuicide => Problem(((int)GameResult.PreventSuicide).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
                     GameResult.PreventKo => Problem(((int)GameResult.PreventKo).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
-                    _ => Problem(((int)GameResult.Failed).ToString(), statusCode: (int)HttpStatusCode.NotFound),
+                    _ => NotFound(),
                 };
             }
             return Ok(result);

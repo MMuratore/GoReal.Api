@@ -1,16 +1,17 @@
 ﻿using System.Linq;
 using System.Net;
-using GoReal.Common.Interfaces;
-using GoReal.Common.Interfaces.Enumerations;
-using GoReal.Models.Api;
-using D = GoReal.Models.Entities;
+using D = GoReal.Dal.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Tools.Security.Token;
 using GoReal.Api.Infrastrucutre;
 using Microsoft.AspNetCore.Cors;
 using System.Collections.Generic;
-using GoReal.Services.Api.Mappers;
-using GoReal.Models.Api.DataTransfertObject;
+using GoReal.Common.Exceptions.Enumerations;
+using GoReal.Common.Exceptions;
+using GoReal.Dal.Repository.Interfaces;
+using GoReal.Api.Services.Mappers;
+using GoReal.Api.Models;
+using GoReal.Api.Models.Forms;
 
 namespace GoReal.Api.Controllers
 {
@@ -34,8 +35,7 @@ namespace GoReal.Api.Controllers
         public IActionResult Get()
         {
             List<User> users = _userService.Get().Select(x => x.ToClient()).ToList();
-            if (users is null)
-                return Problem(((int)UserResult.Failed).ToString(), statusCode: (int)HttpStatusCode.NotFound);
+            if (users is null) return NotFound();
 
             return Ok(users);
         }
@@ -44,8 +44,7 @@ namespace GoReal.Api.Controllers
         public IActionResult Get(int id)
         {
             User user = _userService.Get(id).ToClient();
-            if (user is null)
-                return Problem(((int)UserResult.Failed).ToString(), statusCode: (int)HttpStatusCode.NotFound);
+            if (user is null) return NotFound();
 
             return Ok(user);
         }
@@ -58,18 +57,21 @@ namespace GoReal.Api.Controllers
                 return BadRequest();
             }
 
-            switch (_userService.Update(id, user.ToDal()))
+            try
             {
-                case UserResult.Update:
-                    return Ok();
-                case UserResult.GoTagNotUnique:
-                    return Problem(((int)UserResult.GoTagNotUnique).ToString(), statusCode: (int)HttpStatusCode.BadRequest);
-                case UserResult.EmailNotUnique:
-                    return Problem(((int)UserResult.EmailNotUnique).ToString(), statusCode: (int)HttpStatusCode.BadRequest);
-                default:
-                    break;
+                if (!_userService.Update(id, user.ToDal())) return NotFound();
             }
-            return NotFound();
+            catch (UserException exception)
+            {
+                return exception.Result switch
+                {
+                    UserResult.GoTagNotUnique => Problem(((int)UserResult.GoTagNotUnique).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
+                    UserResult.EmailNotUnique => Problem(((int)UserResult.EmailNotUnique).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
+                    _ => NotFound(),
+                };
+            }
+
+            return Ok();
         }
 
         [HttpPatch("{id}")]

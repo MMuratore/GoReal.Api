@@ -1,11 +1,12 @@
 ﻿using System.Net;
-using GoReal.Common.Interfaces;
-using GoReal.Common.Interfaces.Enumerations;
 using Microsoft.AspNetCore.Mvc;
-using GoReal.Models.Entities;
 using GoReal.Api.Infrastrucutre;
 using Microsoft.AspNetCore.Cors;
-using GoReal.Models.Api.DataTransfertObject;
+using GoReal.Common.Exceptions;
+using GoReal.Common.Exceptions.Enumerations;
+using GoReal.Dal.Entities;
+using GoReal.Dal.Repository.Interfaces;
+using GoReal.Api.Models.Forms;
 
 namespace GoReal.Api.Controllers
 {
@@ -25,20 +26,22 @@ namespace GoReal.Api.Controllers
         [HttpPut]
         public IActionResult Put([FromBody] UserRoleForm form)
         {
-            switch (_roleService.AddRoleToUser(form.GoTag, form.RoleName))
+            try
             {
-                case RoleResult.Register:
-                    return Ok();
-                case RoleResult.UserRoleNotUnique:
-                    return Problem("User already possess that role", statusCode: (int)HttpStatusCode.BadRequest);
-                case RoleResult.UserNotExist:
-                    return Problem("Unknown user", statusCode: (int)HttpStatusCode.BadRequest);
-                case RoleResult.RoleNotExist:
-                    return Problem("Unknown role", statusCode: (int)HttpStatusCode.BadRequest);
-                default:
-                    break;
+                if(!_roleService.AddRoleToUser(form.GoTag, form.RoleName)) return NotFound();
             }
-            return NotFound();
+            catch (RoleException exception)
+            {
+                return exception.Result switch
+                {
+                    RoleResult.UserRoleNotUnique => Problem(((int)RoleResult.UserRoleNotUnique).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
+                    RoleResult.UserNotExist => Problem(((int)RoleResult.UserNotExist).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
+                    RoleResult.RoleNotExist => Problem(((int)RoleResult.RoleNotExist).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
+                    _ => NotFound(),
+                };
+            }
+
+            return Ok();
         }
     }
 }

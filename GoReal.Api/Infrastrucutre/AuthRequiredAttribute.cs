@@ -1,4 +1,4 @@
-﻿using GoReal.Models.Entities;
+﻿using GoReal.Dal.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Primitives;

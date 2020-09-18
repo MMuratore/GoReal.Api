@@ -1,9 +1,8 @@
 using GoReal.Api.Infrastrucutre.Configuration;
-using GoReal.Common.Interfaces;
-using GoReal.Common.Interfaces.Enumerations;
-using GoReal.Models.Entities;
-using GoReal.Models.Services;
-using GoReal.Services.Api;
+using GoReal.Api.Services;
+using GoReal.Dal.Repository;
+using GoReal.Dal.Repository.Interfaces;
+using D = GoReal.Dal.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +12,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using Tools.Databases;
 using Tools.Security.Token;
+using GoReal.Dal.Entities;
 
 namespace GoReal.Api
 {
@@ -56,7 +56,7 @@ namespace GoReal.Api
 
             services.AddSingleton<IAuthRepository<User>, AuthRepository>();
             services.AddSingleton<IUserRepository<User>, UserRepository>();
-            services.AddSingleton<IRoleRepository<Role>, RoleRepository>();
+            services.AddSingleton<IRoleRepository<D.Role>, RoleRepository>();
 
             services.AddSingleton<GameService>();
         }
