@@ -6,6 +6,7 @@ using GoReal.Dal.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using Tools.Databases;
 
 namespace GoReal.Dal.Repository
@@ -51,8 +52,8 @@ namespace GoReal.Dal.Repository
             }
             catch (Exception e)
             {
-                if (e.Message.Contains("UK_User_GoTag")) throw new UserException(UserResult.GoTagNotUnique, "GoTag is already use");
-                if (e.Message.Contains("UK_User_Email")) throw new UserException(UserResult.EmailNotUnique, "Email is already use");
+                if (e.Message.Contains("UK_User_GoTag")) throw new UserException(UserResult.GoTagNotUnique, HttpStatusCode.BadRequest, "GoTag is already use");
+                if (e.Message.Contains("UK_User_Email")) throw new UserException(UserResult.EmailNotUnique, HttpStatusCode.BadRequest, "Email is already use");
             }
 
             return isUpdate;

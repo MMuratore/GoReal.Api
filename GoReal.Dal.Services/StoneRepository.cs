@@ -5,6 +5,7 @@ using GoReal.Dal.Repository.Extensions;
 using GoReal.Dal.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using Tools.Databases;
 
 namespace GoReal.Dal.Repository
@@ -43,7 +44,7 @@ namespace GoReal.Dal.Repository
             catch (Exception e)
             {
                 if (e.Message.Contains("PK_Stone"))
-                    throw new GameException(GameResult.PreventOverwrite, "Prevent Overwrite");
+                    throw new GameException(GameResult.PreventOverwrite, HttpStatusCode.BadRequest, "Prevent Overwrite");
             }
 
             return result;

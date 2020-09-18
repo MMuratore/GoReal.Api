@@ -39,12 +39,7 @@ namespace GoReal.Api.Controllers
             }
             catch (UserException exception)
             {
-                return exception.Result switch
-                {
-                    UserResult.Ban => Problem(((int)UserResult.Ban).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
-                    UserResult.Inactive => Problem(((int)UserResult.Inactive).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
-                    _ => NotFound(),
-                };
+                return Problem(exception.Result.ToString(), statusCode: (int)exception.HttpStatusCode, type: ((int)exception.Result).ToString());
             }
 
             if (user is null) return NotFound();
@@ -71,12 +66,7 @@ namespace GoReal.Api.Controllers
             }
             catch (UserException exception)
             {
-                return exception.Result switch
-                {
-                    UserResult.GoTagNotUnique => Problem(((int)UserResult.GoTagNotUnique).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
-                    UserResult.EmailNotUnique => Problem(((int)UserResult.EmailNotUnique).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
-                    _ => NotFound(),
-                };
+                return Problem(exception.Result.ToString(), statusCode: (int)exception.HttpStatusCode, type: ((int)exception.Result).ToString());
             }
 
             return Ok();

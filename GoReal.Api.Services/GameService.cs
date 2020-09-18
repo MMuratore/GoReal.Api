@@ -9,6 +9,7 @@ using D = GoReal.Dal.Entities;
 using GoReal.Dal.Repository.Interfaces;
 using GoReal.Dal.Repository;
 using GoReal.Api.Services.Mappers;
+using System.Net;
 
 namespace GoReal.Api.Services
 {
@@ -34,7 +35,7 @@ namespace GoReal.Api.Services
             Game game = _gameRepository.Get(id)?.ToClient();
 
             if (game is null)
-                throw new GameException(GameResult.GameNotExist, "Game do not exist");
+                throw new GameException(GameResult.GameNotExist, HttpStatusCode.NotFound, "Game do not exist");
 
             game.Rule = _ruleRepository.Get(game.Rule.Id);
             game.TimeControl = _timeControlRepository.Get(game.TimeControl.Id);
@@ -46,7 +47,7 @@ namespace GoReal.Api.Services
             Board board = new Board(stones, game.Size, game.Size, game.BlackPlayer, game.WhitePlayer, game.BlackCapture, game.WhiteCapture, game.KoInfo.ToStone());
 
             if (!board.IsValid())
-                throw new GameException(GameResult.BoardNotValid, "Board not valid");
+                throw new GameException(GameResult.BoardNotValid, HttpStatusCode.BadRequest, "Board not valid");
 
             board.SetCaptures(game.BlackPlayer, game.BlackCapture);
             board.SetCaptures(game.WhitePlayer, game.WhiteCapture);
@@ -67,10 +68,10 @@ namespace GoReal.Api.Services
             Game game = _gameRepository.Get(gameId).ToClient();
 
             if (game is null)
-                throw new GameException(GameResult.GameNotExist, "Game do not exist");
+                throw new GameException(GameResult.GameNotExist, HttpStatusCode.NotFound, "Game do not exist");
 
             if (!(game.Result is null))
-                throw new GameException(GameResult.GameFinished, "Game already finished");
+                throw new GameException(GameResult.GameFinished, HttpStatusCode.BadRequest, "Game already finished");
 
             result.BlackCapture = game.BlackCapture;
             result.WhiteCapture = game.WhiteCapture;
@@ -108,14 +109,14 @@ namespace GoReal.Api.Services
             }
 
             if (newStone.Color is true && game.WhiteState != true || newStone.Color is false && game.BlackState != true)
-                throw new GameException(GameResult.OtherPlayerTurn, "Not your turn");
+                throw new GameException(GameResult.OtherPlayerTurn, HttpStatusCode.BadRequest, "Not your turn");
 
             game.Rule = _ruleRepository.Get(game.Rule.Id);
             List<D.Stone> stones = _stoneRepository.Get(gameId).ToList();
             Board board = new Board(stones, game.Size, game.Size, game.BlackPlayer, game.WhitePlayer, game.BlackCapture, game.WhiteCapture, game.KoInfo.ToStone());
 
             if (!board.IsValid())
-                throw new GameException(GameResult.BoardNotValid, "Board not valid");
+                throw new GameException(GameResult.BoardNotValid, HttpStatusCode.BadRequest, "Board not valid");
 
             board.SetCaptures(game.BlackPlayer, game.BlackCapture);
             board.SetCaptures(game.WhitePlayer, game.WhiteCapture);

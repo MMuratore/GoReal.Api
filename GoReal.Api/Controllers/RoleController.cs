@@ -32,13 +32,8 @@ namespace GoReal.Api.Controllers
             }
             catch (RoleException exception)
             {
-                return exception.Result switch
-                {
-                    RoleResult.UserRoleNotUnique => Problem(((int)RoleResult.UserRoleNotUnique).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
-                    RoleResult.UserNotExist => Problem(((int)RoleResult.UserNotExist).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
-                    RoleResult.RoleNotExist => Problem(((int)RoleResult.RoleNotExist).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
-                    _ => NotFound(),
-                };
+                return Problem(exception.Result.ToString(), statusCode: (int)exception.HttpStatusCode, type: ((int)exception.Result).ToString());
+
             }
 
             return Ok();

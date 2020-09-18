@@ -2,10 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using GoReal.Api.Infrastrucutre;
 using Microsoft.AspNetCore.Cors;
-using System.Net;
 using GoReal.Api.Services;
 using GoReal.Api.Models.DataTransfertObject;
-using GoReal.Common.Exceptions.Enumerations;
 using GoReal.Common.Exceptions;
 using GoReal.Api.Models;
 
@@ -33,14 +31,9 @@ namespace GoReal.Api.Controllers
             {
                 game = _gameService.Get(id);
             }
-            catch (GameException gameException)
+            catch (GameException exception)
             {
-                return gameException.Result switch
-                {
-                    GameResult.GameNotExist => Problem(((int)GameResult.GameNotExist).ToString(), statusCode: (int)HttpStatusCode.NotFound),
-                    GameResult.BoardNotValid => Problem(((int)GameResult.BoardNotValid).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
-                    _ => NotFound(),
-                };
+                return Problem(exception.Result.ToString(), statusCode: (int)exception.HttpStatusCode, type: ((int)exception.Result).ToString());
             }
             return Ok(game);
         }
@@ -62,19 +55,9 @@ namespace GoReal.Api.Controllers
             {
                 result = _gameService.MakeMove(id, newStone);
             }
-            catch (GameException gameException)
+            catch (GameException execption)
             {
-                return gameException.Result switch
-                {
-                    GameResult.GameNotExist => Problem(((int)GameResult.GameNotExist).ToString(), statusCode: (int)HttpStatusCode.NotFound),
-                    GameResult.GameFinished => Problem(((int)GameResult.GameFinished).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
-                    GameResult.OtherPlayerTurn => Problem(((int)GameResult.OtherPlayerTurn).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
-                    GameResult.BoardNotValid => Problem(((int)GameResult.BoardNotValid).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
-                    GameResult.PreventOverwrite => Problem(((int)GameResult.PreventOverwrite).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
-                    GameResult.PreventSuicide => Problem(((int)GameResult.PreventSuicide).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
-                    GameResult.PreventKo => Problem(((int)GameResult.PreventKo).ToString(), statusCode: (int)HttpStatusCode.BadRequest),
-                    _ => NotFound(),
-                };
+                return Problem(execption.Result.ToString(), statusCode: (int)execption.HttpStatusCode, type: ((int)execption.Result).ToString());
             }
             return Ok(result);
         }

@@ -6,8 +6,8 @@ namespace GoReal.Common.Exceptions
 {
     public class GameException: Exception
     {
-        public GameResult Result { get; set; }
-        //public HttpStatusCode HttpStatusCode ‘get.set.
+        public GameResult Result { get; }
+        public HttpStatusCode HttpStatusCode { get; } = HttpStatusCode.NotFound;
 
         public GameException() :base ("Game Exception") { }
         public GameException(string message) : base(message) { }
@@ -15,6 +15,10 @@ namespace GoReal.Common.Exceptions
         {
             Result = result;
         }
-        //public ObjectResult createProblem
+        public GameException(GameResult result, HttpStatusCode httpStatusCode, string message) : this(result, $"{(int)result} - {message}")
+        {
+            HttpStatusCode = httpStatusCode;
+        }
+
     }
 }
