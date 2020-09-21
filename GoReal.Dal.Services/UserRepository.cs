@@ -2,7 +2,7 @@
 using GoReal.Common.Exceptions.Enumerations;
 using GoReal.Dal.Entities;
 using GoReal.Dal.Repository.Extensions;
-using GoReal.Dal.Repository.Interfaces;
+using GoReal.Common.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ using Tools.Databases;
 
 namespace GoReal.Dal.Repository
 {
-    public class UserRepository : IUserRepository<User>
+    public class UserRepository : IUserRepository<User>, IUserAdminRepository<User>
     {
         private readonly Connection _connection;
 
@@ -20,26 +20,19 @@ namespace GoReal.Dal.Repository
             _connection = connection;
         }
 
-        public IEnumerable<User> Get()
-        {
-            Command cmd = new Command("UserGetAll", true);
-
-            return _connection.ExecuteReader(cmd, (dr) => dr.ToUser());
-        }
-
-        public User Get(int userId)
+        public User Get(int id)
         {
             Command cmd = new Command("UserGet", true);
-            cmd.AddParameter("UserId", userId);
+            cmd.AddParameter("UserId", id);
 
             return _connection.ExecuteReader(cmd, (dr) => dr.ToUser()).SingleOrDefault();
         }
 
-        public bool Update(int userId, User user)
+        public bool Update(int id, User user)
         {
             bool isUpdate = false;
             Command cmd = new Command("UserUpdate", true);
-            cmd.AddParameter("UserId", userId);
+            cmd.AddParameter("UserId", id);
             cmd.AddParameter("GoTag", user.GoTag);
             cmd.AddParameter("LastName", user.LastName);
             cmd.AddParameter("FirstName", user.FirstName);
@@ -59,34 +52,41 @@ namespace GoReal.Dal.Repository
             return isUpdate;
         }
 
-        public bool Activate(int userId)
-        {
-            Command cmd = new Command("UserActivate", true);
-            cmd.AddParameter("userId", userId);
-
-            return _connection.ExecuteNonQuery(cmd) == 1;
-        }
-
-        public bool Delete(int userId)
+        public bool Desactivate(int id)
         {
             Command cmd = new Command("UserDelete", true);
-            cmd.AddParameter("userId", userId);
+            cmd.AddParameter("userId", id);
 
             return _connection.ExecuteNonQuery(cmd) == 1;
         }
 
-        public bool DeleteAdmin(int userId)
+        public IEnumerable<User> Get()
+        {
+            Command cmd = new Command("UserGetAll", true);
+
+            return _connection.ExecuteReader(cmd, (dr) => dr.ToUser());
+        }
+
+        public bool Delete(int id)
         {
             Command cmd = new Command("UserDeleteAdmin", true);
-            cmd.AddParameter("userId", userId);
+            cmd.AddParameter("userId", id);
 
             return _connection.ExecuteNonQuery(cmd) >= 1;
         }
 
-        public bool Ban(int userId)
+        public bool Activate(int id)
+        {
+            Command cmd = new Command("UserActivate", true);
+            cmd.AddParameter("userId", id);
+
+            return _connection.ExecuteNonQuery(cmd) == 1;
+        }
+
+        public bool Ban(int id)
         {
             Command cmd = new Command("UserBan", true);
-            cmd.AddParameter("userId", userId);
+            cmd.AddParameter("userId", id);
 
             return _connection.ExecuteNonQuery(cmd) == 1;
         }

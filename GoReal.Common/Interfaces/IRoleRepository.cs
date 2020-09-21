@@ -1,5 +1,5 @@
 ﻿
-namespace GoReal.Dal.Repository.Interfaces
+namespace GoReal.Common.Interfaces
 {
     public interface IRoleRepository<TRole>
     {

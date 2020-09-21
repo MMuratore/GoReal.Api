@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GoReal.Dal.Repository.Interfaces
+namespace GoReal.Common.Interfaces
 {
     public interface IStoneRepository<TStone>
     {

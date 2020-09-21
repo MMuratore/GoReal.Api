@@ -1,6 +1,6 @@
 ﻿using GoReal.Dal.Entities;
 using GoReal.Dal.Repository.Extensions;
-using GoReal.Dal.Repository.Interfaces;
+using GoReal.Common.Interfaces;
 using System;
 using System.Linq;
 using Tools.Databases;
@@ -39,6 +39,11 @@ namespace GoReal.Dal.Repository
         }
 
         public bool Update(int id, TimeControl entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Delete(int id)
         {
             throw new NotImplementedException();
         }

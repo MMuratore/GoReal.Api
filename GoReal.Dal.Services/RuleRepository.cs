@@ -1,8 +1,9 @@
 ﻿using GoReal.Dal.Entities;
 using GoReal.Dal.Repository.Extensions;
-using GoReal.Dal.Repository.Interfaces;
+using GoReal.Common.Interfaces;
 using System.Linq;
 using Tools.Databases;
+using System.Collections.Generic;
 
 namespace GoReal.Dal.Repository
 {
@@ -33,6 +34,16 @@ namespace GoReal.Dal.Repository
         }
 
         public bool Update(int id, Rule entity)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IEnumerable<Rule> Get()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool Delete(int id)
         {
             throw new System.NotImplementedException();
         }

@@ -1,7 +1,7 @@
 ﻿using GoReal.Common.Exceptions;
 using GoReal.Common.Exceptions.Enumerations;
 using GoReal.Dal.Entities;
-using GoReal.Dal.Repository.Interfaces;
+using GoReal.Common.Interfaces;
 using System;
 using System.Net;
 using Tools.Databases;

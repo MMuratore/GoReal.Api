@@ -1,18 +1,28 @@
 ﻿using GoReal.Dal.Entities;
 using GoReal.Dal.Repository.Extensions;
-using GoReal.Dal.Repository.Interfaces;
+using GoReal.Common.Interfaces;
 using System.Linq;
 using Tools.Databases;
+using System.Collections.Generic;
 
 namespace GoReal.Dal.Repository
 {
-    public class GameRepository : IRepository<Game>
+    public class GameRepository : IRepository<Game>, IGameRepository<Game>
     {
         private readonly Connection _connection;
 
         public GameRepository(Connection connection)
         {
             _connection = connection;
+        }
+
+        public IEnumerable<Game> GetByUserId(int userId)
+        {
+            User user = new User();
+            Command cmd = new Command("SELECT * FROM [Game] WHERE [BlackPlayerId] = @userId OR [WhitePlayerId] = @userId");
+            cmd.AddParameter("userId", userId);
+
+            return _connection.ExecuteReader(cmd, (dr) => dr.ToGame());
         }
 
         public Game Get(int id)
@@ -51,6 +61,11 @@ namespace GoReal.Dal.Repository
             cmd.AddParameter("KoInfo", entity.KoInfo);
 
             return _connection.ExecuteNonQuery(cmd) == 1;
+        }
+
+        public bool Delete(int id)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
