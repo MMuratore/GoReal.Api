@@ -40,7 +40,7 @@ INSERT INTO [Game]
 INSERT INTO [Game]
 		VALUES ('2020-09-04', 200, 80, null, 9, 0, 0, 5, 0, 1, 0, '-1,-1,null', 1, 1, 1, 2);
 
-EXECUTE[dbo].[GameCreate] @Date = '2020-09-03', @Size = 9, @Komi = 0, @Handicap = 0, @TimeControlId = 1,
+EXECUTE[dbo].[GameCreate] @Size = 9, @Komi = 0, @Handicap = 0, @TimeControlId = 1,
 		@RuleId = 1, @BlackPlayerId = 2, @WhitePlayerId = 1;
 
 EXECUTE [dbo].[AddStone] @GameId = 3, @Row = 1, @Column = 0, @Color = 0;
