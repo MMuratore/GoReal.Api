@@ -94,37 +94,6 @@ namespace GoReal.Api.Services
             result.WhiteCapture = game.WhiteCapture;
             result.KoInfo = game.KoInfo.ToStone();
 
-            if (newStone.Color is null && newStone.Row == -1 && newStone.Column == -1)
-            {
-                result.Result = game.BlackState is true ? "W+R" : "B+R";
-                game.Result = result.Result;
-                game.BlackState = result.BlackState = null;
-                game.WhiteState = result.WhiteState = null;
-                _gameRepository.Update(gameId, game.ToDal());
-                return result;
-            }
-
-            if (newStone.Color is null)
-            {
-                game.BlackState = game.BlackState is true ? null : game.BlackState;
-                game.WhiteState = game.WhiteState is true ? null : game.WhiteState;
-
-                if (game.BlackState == null && game.WhiteState == null)
-                {
-                    //TODO: implement end of game
-                    game.Result = "TODO";
-                    _gameRepository.Update(gameId, game.ToDal());
-                    return result;
-                }
-                else
-                {
-                    result.BlackState = game.BlackState = game.BlackState is null ? null : !game.BlackState;
-                    result.WhiteState = game.WhiteState = game.WhiteState is null ? null : !game.WhiteState;
-                    _gameRepository.Update(gameId, game.ToDal());
-                    return result;
-                }
-            }
-
             if (newStone.Color is true && game.WhiteState != true || newStone.Color is false && game.BlackState != true)
                 throw new GameException(GameResult.OtherPlayerTurn, HttpStatusCode.BadRequest, "Not your turn");
 
@@ -137,6 +106,9 @@ namespace GoReal.Api.Services
 
             board.SetCaptures(game.BlackPlayer, game.BlackCapture);
             board.SetCaptures(game.WhitePlayer, game.WhiteCapture);
+
+            if (!board.Has(newStone) || newStone.Color is null)
+                throw new GameException(GameResult.InvalidMove, HttpStatusCode.BadRequest, "Invalid move");
 
             Board move = board.MakeMove(newStone, game.Rule.Suicide, game.Rule.Overwrite, game.Rule.Ko);
 
@@ -155,6 +127,113 @@ namespace GoReal.Api.Services
             game.KoInfo = move.KoInfo.ToDal();
 
             _gameRepository.Update(gameId, game.ToDal());
+
+            return result;
+        }
+
+        public MoveResult Pass(int gameId, int userId)
+        {
+            MoveResult result = new MoveResult();
+            Game game = _gameRepository.Get(gameId).ToClient();
+
+            if (game is null)
+                throw new GameException(GameResult.GameNotExist, HttpStatusCode.NotFound, "Game do not exist");
+
+            if (!(game.Result is null))
+                throw new GameException(GameResult.GameFinished, HttpStatusCode.BadRequest, "Game already finished");
+
+            result.BlackCapture = game.BlackCapture;
+            result.WhiteCapture = game.WhiteCapture;
+            result.KoInfo = game.KoInfo.ToStone();
+
+            result = ModifyPlayerState(result, game, userId);
+
+            game.BlackState = result.BlackState;
+            game.WhiteState = result.WhiteState;
+            game.Result = result.Result;
+
+            _gameRepository.Update(gameId, game.ToDal());
+
+            return result;
+        }
+
+        public MoveResult Resign(int gameId, int userId)
+        {
+            MoveResult result = new MoveResult();
+            Game game = _gameRepository.Get(gameId).ToClient();
+
+            if (game is null)
+                throw new GameException(GameResult.GameNotExist, HttpStatusCode.NotFound, "Game do not exist");
+
+            if (!(game.Result is null))
+                throw new GameException(GameResult.GameFinished, HttpStatusCode.BadRequest, "Game already finished");
+
+            result.BlackCapture = game.BlackCapture;
+            result.WhiteCapture = game.WhiteCapture;
+            result.KoInfo = game.KoInfo.ToStone();
+
+            if (game.BlackPlayer.UserId == userId)
+            {
+                if (!(game.BlackState == true))
+                    throw new GameException(GameResult.OtherPlayerTurn, HttpStatusCode.BadRequest, "Not your turn");
+                result.Result = "W+R";
+            }
+                
+            else if(game.WhitePlayer.UserId == userId)
+            {
+                if (!(game.WhiteState == true))
+                    throw new GameException(GameResult.OtherPlayerTurn, HttpStatusCode.BadRequest, "Not your turn");
+                result.Result = "B+R";
+            }
+            else
+                throw new GameException(GameResult.NotParticipate, HttpStatusCode.BadRequest, "User don't participate");
+
+            game.Result = result.Result;
+            game.BlackState = null;
+            game.WhiteState = null;
+            _gameRepository.Update(gameId, game.ToDal());
+
+            return result;
+        }
+
+        private MoveResult ModifyPlayerState(MoveResult result, Game game, int userId)
+        {
+            if (game.BlackPlayer.UserId == userId)
+            {
+                if (!(game.BlackState == true))
+                    throw new GameException(GameResult.OtherPlayerTurn, HttpStatusCode.BadRequest, "Not your turn");
+
+                game.BlackState = null;
+                if (game.BlackState == null && game.WhiteState == null)
+                {
+                    //TODO: implement end of game
+                    result.Result = "TODO";
+                }
+                else
+                {
+                    result.BlackState = game.BlackState is null ? null : !game.BlackState;
+                    result.WhiteState = game.WhiteState is null ? null : !game.WhiteState;
+                }
+            }
+
+            else if (game.WhitePlayer.UserId == userId)
+            {
+                if (!(game.WhiteState == true))
+                    throw new GameException(GameResult.OtherPlayerTurn, HttpStatusCode.BadRequest, "Not your turn");
+                game.WhiteState = null;
+                if (game.BlackState == null && game.WhiteState == null)
+                {
+                    //TODO: implement end of game
+                    result.Result = "TODO";
+                }
+                else
+                {
+                    result.BlackState = game.BlackState is null ? null : !game.BlackState;
+                    result.WhiteState = game.WhiteState is null ? null : !game.WhiteState;
+                }
+            }
+            else
+                throw new GameException(GameResult.NotParticipate, HttpStatusCode.BadRequest, "User don't participate");
 
             return result;
         }

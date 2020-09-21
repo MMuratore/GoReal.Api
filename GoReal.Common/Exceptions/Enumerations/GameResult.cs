@@ -6,7 +6,7 @@ namespace GoReal.Common.Exceptions.Enumerations
 {
     public enum GameResult
     {
-        ValidMove,
+        InvalidMove,
         PointNotExist,
         PreventOverwrite,
         PreventKo,
@@ -14,6 +14,7 @@ namespace GoReal.Common.Exceptions.Enumerations
         GameNotExist,
         GameFinished,
         BoardNotValid,
-        OtherPlayerTurn
+        OtherPlayerTurn,
+        NotParticipate
     }
 }

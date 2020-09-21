@@ -78,5 +78,39 @@ namespace GoReal.Api.Controllers
             }
             return Ok(result);
         }
+
+        [HttpPut]
+        [Route("pass/{id}/{userId}")]
+        public IActionResult Pass(int id, int userId)
+        {
+            _ = new MoveResult();
+            MoveResult result;
+            try
+            {
+                result = _gameService.Pass(id, userId);
+            }
+            catch (GameException execption)
+            {
+                return Problem(execption.Result.ToString(), statusCode: (int)execption.HttpStatusCode, type: ((int)execption.Result).ToString());
+            }
+            return Ok(result);
+        }
+
+        [HttpPut]
+        [Route("resign/{id}/{userId}")]
+        public IActionResult Resign(int id, int userId)
+        {
+            _ = new MoveResult();
+            MoveResult result;
+            try
+            {
+                result = _gameService.Resign(id, userId);
+            }
+            catch (GameException execption)
+            {
+                return Problem(execption.Result.ToString(), statusCode: (int)execption.HttpStatusCode, type: ((int)execption.Result).ToString());
+            }
+            return Ok(result);
+        }
     }
 }

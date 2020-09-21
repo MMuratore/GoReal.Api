@@ -210,7 +210,7 @@ namespace GoReal.Api.Models
             return board;
         }
 
-        private bool Has(Stone stone)
+        public bool Has(Stone stone)
         {
             return (0 <= stone.Row) && (stone.Row < Width) && (0 <= stone.Column) && (stone.Column < Height);
         }
