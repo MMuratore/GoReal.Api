@@ -8,7 +8,7 @@ BEGIN
 
 	IF EXISTS (SELECT [BlackRank], [WhiteRank], [Result], [BlackPlayerId], [WhitePlayerId] FROM [Game] WHERE [Date] IN (SELECT max([Date]) FROM [Game] WHERE [Result] is not null AND ([BlackPlayerId] = @UserId OR [WhitePlayerId] = @UserId)))
 	BEGIN
-		INSERT INTO @Ranking SELECT [BlackRank], [WhiteRank], [Result], [BlackPlayerId], [WhitePlayerId] FROM [Game] WHERE [Date] IN (SELECT max([Date]) FROM [Game] WHERE [Result] is not null AND ([BlackPlayerId] = @UserId OR [WhitePlayerId] = @UserId))
+		INSERT INTO @Ranking SELECT TOP 1 [BlackRank], [WhiteRank], [Result], [BlackPlayerId], [WhitePlayerId] FROM [Game] WHERE [Date] IN (SELECT max([Date]) FROM [Game] WHERE [Result] is not null AND ([BlackPlayerId] = @UserId OR [WhitePlayerId] = @UserId))
 		IF(CHARINDEX('B',(SELECT [Result] FROM @Ranking)) > 0)
 		BEGIN
 			IF((SELECT [BlackId] FROM @Ranking) = @UserId)

@@ -1,8 +1,5 @@
 using GoReal.Api.Infrastrucutre.Configuration;
 using GoReal.Api.Services;
-using GoReal.Dal.Repository;
-using GoReal.Dal.Repository.Interfaces;
-using D = GoReal.Dal.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -43,21 +40,18 @@ namespace GoReal.Api
 
             IConfigurationSection jwtSection = Configuration.GetSection("JwtBearerTokenSettings");
             JwtBearerTokenSettings jwtBearerTokenSettings = jwtSection.Get<JwtBearerTokenSettings>();
-
             services.AddSingleton<ITokenService, TokenService>(sp => new TokenService(jwtSection.Get<JwtBearerTokenSettings>().SecretKey));
 
             IConfigurationSection dbSection = Configuration.GetSection("DbConnectionSettings");
             DbConnectionSettings dbConnectionSettings = dbSection.Get<DbConnectionSettings>();
             string connectionString = dbSection.Get<DbConnectionSettings>().SqlServerConnectionString;
-            
             services.AddSingleton<DbProviderFactory>(sp => SqlClientFactory.Instance);
             services.AddSingleton(sp => new ConnectionInfo(connectionString));
             services.AddSingleton<Connection>();
 
-            services.AddSingleton<IAuthRepository<User>, AuthRepository>();
-            services.AddSingleton<IUserRepository<User>, UserRepository>();
-            services.AddSingleton<IRoleRepository<D.Role>, RoleRepository>();
-
+            services.AddSingleton<AuthService>();
+            services.AddSingleton<UserService>();
+            services.AddSingleton<RoleService>();
             services.AddSingleton<GameService>();
         }
 

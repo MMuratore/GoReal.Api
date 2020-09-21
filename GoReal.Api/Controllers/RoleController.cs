@@ -1,12 +1,10 @@
-﻿using System.Net;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using GoReal.Api.Infrastrucutre;
 using Microsoft.AspNetCore.Cors;
 using GoReal.Common.Exceptions;
-using GoReal.Common.Exceptions.Enumerations;
 using GoReal.Dal.Entities;
-using GoReal.Dal.Repository.Interfaces;
 using GoReal.Api.Models.Forms;
+using GoReal.Api.Services;
 
 namespace GoReal.Api.Controllers
 {
@@ -16,9 +14,9 @@ namespace GoReal.Api.Controllers
     [AuthRequired(Role.SuperAdministrator)]
     public class RoleController : ControllerBase
     {
-        private readonly IRoleRepository<Role> _roleService;
+        private readonly RoleService _roleService;
 
-        public RoleController(IRoleRepository<Role> RoleService)
+        public RoleController(RoleService RoleService)
         {
             _roleService = RoleService;
         }

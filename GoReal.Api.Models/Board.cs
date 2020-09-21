@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GoReal.Models.Api.Helpers;
+using GoReal.Api.Models.Helpers;
 using GoReal.Common.Exceptions;
 using GoReal.Common.Exceptions.Enumerations;
 using GoReal.Dal.Entities;
-using GoReal.Api.Models.DataTransfertObject;
 
 namespace GoReal.Api.Models
 {

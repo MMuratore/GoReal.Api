@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace GoReal.Api.Models.DataTransfertObject
+namespace GoReal.Api.Models
 {
     public class MoveResult
     {

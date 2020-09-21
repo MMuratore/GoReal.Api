@@ -1,7 +1,7 @@
 ﻿using GoReal.Dal.Entities;
 using System.Collections.Generic;
 
-namespace GoReal.Models.Api.Helpers
+namespace GoReal.Api.Models.Helpers
 {
     public static class JaggedArray
     {

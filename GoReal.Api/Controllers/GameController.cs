@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using GoReal.Api.Infrastrucutre;
 using Microsoft.AspNetCore.Cors;
 using GoReal.Api.Services;
-using GoReal.Api.Models.DataTransfertObject;
-using GoReal.Common.Exceptions;
 using GoReal.Api.Models;
+using GoReal.Common.Exceptions;
+using System.Collections.Generic;
 
 namespace GoReal.Api.Controllers
 {
@@ -22,11 +22,28 @@ namespace GoReal.Api.Controllers
             _gameService = GameService;
         }
 
+        [HttpGet]
+        [Route("user/{id}")]
+        public IActionResult User(int id)
+        {
+            _ = new List<Game>();
+            List<Game> games;
+            try
+            {
+                games = _gameService.GetByUserId(id);
+            }
+            catch (GameException exception)
+            {
+                return Problem(exception.Result.ToString(), statusCode: (int)exception.HttpStatusCode, type: ((int)exception.Result).ToString());
+            }
+            return Ok(games);
+        }
+
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            Game game = new Game();
-
+            _ = new Game();
+            Game game;
             try
             {
                 game = _gameService.Get(id);
@@ -49,8 +66,8 @@ namespace GoReal.Api.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] D.Stone newStone)
         {
-            MoveResult result = new MoveResult();
-
+            _ = new MoveResult();
+            MoveResult result;
             try
             {
                 result = _gameService.MakeMove(id, newStone);

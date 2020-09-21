@@ -1,12 +1,11 @@
 ﻿using GoReal.Common.Exceptions;
 using GoReal.Common.Exceptions.Enumerations;
 using GoReal.Api.Models;
-using GoReal.Api.Models.DataTransfertObject;
 using System.Collections.Generic;
 using System.Linq;
 using Tools.Databases;
 using D = GoReal.Dal.Entities;
-using GoReal.Dal.Repository.Interfaces;
+using GoReal.Common.Interfaces;
 using GoReal.Dal.Repository;
 using GoReal.Api.Services.Mappers;
 using System.Net;
@@ -15,7 +14,7 @@ namespace GoReal.Api.Services
 {
     public class GameService
     {
-        private readonly IRepository<D.Game> _gameRepository;
+        private readonly GameRepository _gameRepository;
         private readonly IRepository<D.Rule> _ruleRepository;
         private readonly IRepository<D.TimeControl> _timeControlRepository;
         private readonly IUserRepository<D.User> _userRepository;
@@ -28,6 +27,24 @@ namespace GoReal.Api.Services
             _timeControlRepository = new TimeControlRepository(connection);
             _userRepository = new UserRepository(connection);
             _stoneRepository = new StoneRepository(connection);
+        }
+
+        public List<Game> GetByUserId(int userId)
+        {
+            List<Game> games = _gameRepository.GetByUserId(userId).Select(x => x.ToClient()).ToList();
+
+            if (games is null)
+                throw new GameException(GameResult.GameNotExist, HttpStatusCode.NotFound, "User do not exist");
+
+            foreach (Game game in games)
+            {
+                game.Rule = _ruleRepository.Get(game.Rule.Id);
+                game.TimeControl = _timeControlRepository.Get(game.TimeControl.Id);
+                game.BlackPlayer = _userRepository.Get(game.BlackPlayer.UserId)?.ToClient();
+                game.WhitePlayer = _userRepository.Get(game.WhitePlayer.UserId)?.ToClient();
+            }
+
+            return games;
         }
 
         public Game Get(int id)
