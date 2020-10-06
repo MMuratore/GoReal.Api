@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[GetVictoryRatio]
-	@userId INT
+	@UserId INT
 AS
 BEGIN
 	DECLARE @Victory INT = 0;
