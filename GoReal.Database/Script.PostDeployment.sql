@@ -34,13 +34,13 @@ EXECUTE [dbo].[TimeControlCreate] @Speed = 'Live', @OverTime = 'Absolute', @Time
 EXECUTE [dbo].[TimeControlCreate] @Speed = 'Blitz', @OverTime = 'Absolute',  @TimeLimit = 600;
 
 INSERT INTO [Game]
-		VALUES (GETDATE(), '2020-09-03', dbo.GetPlayerRanking(1), dbo.GetPlayerRanking(1), null, 9, 0, 0, 0, 0, null, null, '-1,-1,null', 1, 1, 1, 1);
+		VALUES ('2020-09-02 13:10:00', '2020-09-02 14:00:00', dbo.GetPlayerRanking(1), dbo.GetPlayerRanking(1), null, 9, 0, 0, 0, 0, null, null, '-1,-1,null', 1, 1, 1, 1);
 INSERT INTO [Game]
-		VALUES ('2020-09-03', '2020-09-04', 100, 100, 'W+R', 9, 0, 0, 0, 0, null, null,'-1,-1,null', 1, 1, 1, 2);
+		VALUES ('2020-09-03 13:10:00', '2020-09-03 13:20:00', 100, 100, 'W+R', 9, 0, 0, 0, 0, null, null,'-1,-1,null', 1, 1, 1, 2);
 INSERT INTO [Game]
-		VALUES ('2020-09-04', '2020-09-05', 50, 150, 'W+12', 9, 0, 0, 5, 8, null, null, '-1,-1,null', 1, 1, 1, 2);
+		VALUES ('2020-09-04 13:10:00', '2020-09-04 13:30:00', 50, 150, 'W+12', 9, 0, 0, 5, 8, null, null, '-1,-1,null', 1, 1, 1, 2);
 INSERT INTO [Game]
-		VALUES ('2020-09-04', '2020-09-05', 0, 200, 'B+5', 9, 0, 0, 5, 12, null, null, '-1,-1,null', 1, 1, 1, 2);
+		VALUES ('2020-09-04 15:10:00', '2020-09-04 15:50:00', 0, 200, 'B+5', 9, 0, 0, 5, 12, null, null, '-1,-1,null', 1, 1, 1, 2);
 
 EXECUTE[dbo].[GameCreate] @Size = 9, @Komi = 0, @Handicap = 0, @TimeControlId = 2,
 		@RuleId = 1, @BlackPlayerId = 2, @WhitePlayerId = 1;

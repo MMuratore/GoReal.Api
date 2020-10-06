@@ -68,6 +68,8 @@
     <Folder Include="Procedures\TimeControl" />
     <Folder Include="Procedures\Rule" />
     <Folder Include="Procedures\Stone" />
+    <Folder Include="Procedures\Statistics" />
+    <Folder Include="Functions\Statistics" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Functions\GetPostSalt.sql" />
@@ -101,9 +103,10 @@
     <Build Include="Procedures\User\UserGet.sql" />
     <Build Include="Procedures\Game\GameUpdate.sql" />
     <Build Include="Procedures\User\UserUpdatePassword.sql" />
-    <Build Include="Procedures\Game\GetPlayTime.sql" />
-    <Build Include="Procedures\Game\GetGameNumber.sql" />
-    <Build Include="Procedures\Game\GetVictoryRatio.sql" />
+    <Build Include="Procedures\Statistics\StatisticsGet.sql" />
+    <Build Include="Functions\Statistics\GetGameNumber.sql" />
+    <Build Include="Functions\Statistics\GetPlayTime.sql" />
+    <Build Include="Functions\Statistics\GetVictoryRatio.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
