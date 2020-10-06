@@ -100,6 +100,7 @@
     <Build Include="Procedures\Stone\GetStone.sql" />
     <Build Include="Procedures\User\UserGet.sql" />
     <Build Include="Procedures\Game\GameUpdate.sql" />
+    <Build Include="Procedures\User\UserUpdatePassword.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

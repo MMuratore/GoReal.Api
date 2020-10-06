@@ -6,6 +6,9 @@ using GoReal.Dal.Repository;
 using GoReal.Api.Services.Mappers;
 using Tools.Security.Token;
 using System.Security.Claims;
+using GoReal.Common.Exceptions.Enumerations;
+using System.Net;
+using GoReal.Common.Exceptions;
 
 namespace GoReal.Api.Services
 {
@@ -26,18 +29,17 @@ namespace GoReal.Api.Services
 
             user = _authRepository.Login(login, password)?.ToClient();
 
+            if (user is null)
+                throw new UserException(UserResult.NotFound, HttpStatusCode.NotFound, "invalid login information");
 
-            if (!(user is null))
-            {
-                user.Token = _tokenService.EncodeToken(user, data => new Claim[] {
-                    new Claim("UserId", data.UserId.ToString()),
-                    new Claim("GoTag", data.GoTag),
-                    new Claim("LastName", data.LastName),
-                    new Claim("FirstName", data.FirstName),
-                    new Claim("Email", data.Email),
-                    new Claim("Roles", ((int)data.Roles).ToString())
-                });
-            }
+            user.Token = _tokenService.EncodeToken(user, data => new Claim[] {
+                new Claim("UserId", data.UserId.ToString()),
+                new Claim("GoTag", data.GoTag),
+                new Claim("LastName", data.LastName),
+                new Claim("FirstName", data.FirstName),
+                new Claim("Email", data.Email),
+                new Claim("Roles", ((int)data.Roles).ToString())
+            });
 
             return user;
         }

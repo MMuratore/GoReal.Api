@@ -37,7 +37,6 @@ namespace GoReal.Dal.Repository
             cmd.AddParameter("LastName", user.LastName);
             cmd.AddParameter("FirstName", user.FirstName);
             cmd.AddParameter("Email", user.Email);
-            cmd.AddParameter("Password", user.Password);
 
             try
             {
@@ -50,6 +49,15 @@ namespace GoReal.Dal.Repository
             }
 
             return isUpdate;
+        }
+
+        public bool UpdatePassword(int id, string password)
+        {
+            Command cmd = new Command("UserUpdatePassword", true);
+            cmd.AddParameter("UserId", id);
+            cmd.AddParameter("Password", password);
+
+            return _connection.ExecuteNonQuery(cmd) == 1;
         }
 
         public bool Desactivate(int id)

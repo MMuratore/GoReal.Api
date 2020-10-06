@@ -6,6 +6,7 @@ namespace GoReal.Common.Exceptions.Enumerations
 {
     public enum UserResult
     {
+        NotFound,
         GoTagNotUnique,
         EmailNotUnique,
         Ban,

@@ -29,6 +29,11 @@ namespace GoReal.Api.Services
             return _userRepository.Update(id, entity.ToDal());
         }
 
+        public bool UpdatePassword(int id, string password)
+        {
+            return _userRepository.UpdatePassword(id, password);
+        }
+
         public bool Desactivate(int id)
         {
             return _userRepository.Desactivate(id);

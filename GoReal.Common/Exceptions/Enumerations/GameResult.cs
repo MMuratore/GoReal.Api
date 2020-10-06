@@ -15,6 +15,7 @@ namespace GoReal.Common.Exceptions.Enumerations
         GameFinished,
         BoardNotValid,
         OtherPlayerTurn,
-        NotParticipate
+        NotParticipate,
+        NoGamePlayed
     }
 }

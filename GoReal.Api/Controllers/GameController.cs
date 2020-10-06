@@ -23,14 +23,13 @@ namespace GoReal.Api.Controllers
         }
 
         [HttpGet]
-        [Route("user/{id}")]
-        public IActionResult User(int id)
+        public IActionResult GetByUserId([FromQuery] int userId)
         {
             _ = new List<Game>();
             List<Game> games;
             try
             {
-                games = _gameService.GetByUserId(id);
+                games = _gameService.GetByUserId(userId);
             }
             catch (GameException exception)
             {
@@ -80,8 +79,8 @@ namespace GoReal.Api.Controllers
         }
 
         [HttpPut]
-        [Route("pass/{id}/{userId}")]
-        public IActionResult Pass(int id, int userId)
+        [Route("pass/{id}")]
+        public IActionResult Pass(int id, [FromQuery] int userId)
         {
             _ = new MoveResult();
             MoveResult result;
@@ -97,8 +96,8 @@ namespace GoReal.Api.Controllers
         }
 
         [HttpPut]
-        [Route("resign/{id}/{userId}")]
-        public IActionResult Resign(int id, int userId)
+        [Route("resign/{id}")]
+        public IActionResult Resign(int id, [FromQuery] int userId)
         {
             _ = new MoveResult();
             MoveResult result;

@@ -33,8 +33,8 @@ namespace GoReal.Api.Services
         {
             List<Game> games = _gameRepository.GetByUserId(userId).Select(x => x.ToClient()).ToList();
 
-            if (games is null)
-                throw new GameException(GameResult.GameNotExist, HttpStatusCode.NotFound, "User do not exist");
+            if (games.Count() == 0)
+                throw new GameException(GameResult.NoGamePlayed, HttpStatusCode.NotFound, "User do not exist");
 
             foreach (Game game in games)
             {

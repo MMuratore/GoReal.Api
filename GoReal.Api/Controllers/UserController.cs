@@ -5,6 +5,7 @@ using GoReal.Common.Exceptions;
 using GoReal.Common.Interfaces;
 using GoReal.Api.Models;
 using GoReal.Api.Services;
+using GoReal.Api.Models.Forms;
 
 namespace GoReal.Api.Controllers
 {
@@ -41,6 +42,21 @@ namespace GoReal.Api.Controllers
             try
             {
                 if (!_userService.Update(id, user)) return NotFound();
+            }
+            catch (UserException exception)
+            {
+                return Problem(exception.Result.ToString(), statusCode: (int)exception.HttpStatusCode, type: ((int)exception.Result).ToString());
+            }
+
+            return Ok();
+        }
+
+        [HttpPatch("{id}")]
+        public IActionResult Patch(int id, [FromBody] LoginForm form)
+        {
+            try
+            {
+                if (!_userService.UpdatePassword(id, form.Password)) return NotFound();
             }
             catch (UserException exception)
             {
