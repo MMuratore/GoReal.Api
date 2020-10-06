@@ -80,5 +80,16 @@ namespace GoReal.Dal.Repository.Extensions
                 InitialTime = Dr["InitialTime"] != DBNull.Value ? (int?)Dr["InitialTime"] : null
             };
         }
+
+        internal static Statistic ToStatistic(this IDataRecord Dr)
+        {
+            return new Statistic()
+            {
+                UserId = (int)Dr["UserId"],
+                GameNumber = (int)Dr["GameNumber"],
+                VictoryRatio = (decimal)Dr["VictoryRatio"],
+                PlayTime = (int)Dr["PlayTime"]
+            };
+        }
     }
 }

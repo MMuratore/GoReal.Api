@@ -7,7 +7,7 @@ BEGIN
 	DECLARE @PlayTime INT = 0;
 	DECLARE @Counter INT 
 
-	INSERT INTO @TimeTable SELECT DATEDIFF(MINUTE, [StartDate], [EndDate]) FROM [Game] WHERE ([BlackPlayerId] = 1 OR [WhitePlayerId] = 1) AND [EndDate] IS NOT NULL;
+	INSERT INTO @TimeTable SELECT DATEDIFF(MINUTE, [StartDate], [EndDate]) FROM [Game] WHERE ([BlackPlayerId] = @UserId OR [WhitePlayerId] = @UserId) AND [EndDate] IS NOT NULL;
 	SET @Counter = (SELECT COUNT([Id]) FROM @TimeTable);
 	WHILE ( @Counter > 0)
 	BEGIN
