@@ -8,7 +8,7 @@ namespace GoReal.Dal.Entities
     {
         public int Id { get; set; }
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public int BlackRank { get; set; }
         public int WhiteRank { get; set; }
         public string Result { get; set; }
