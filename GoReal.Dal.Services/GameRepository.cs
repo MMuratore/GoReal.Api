@@ -37,7 +37,7 @@ namespace GoReal.Dal.Repository
         public bool Create(Game entity)
         {
             Command cmd = new Command("GameCreate", true);
-            cmd.AddParameter("Date", entity.Date);
+            cmd.AddParameter("StartDate", entity.StartDate);
             cmd.AddParameter("Size", entity.Size);
             cmd.AddParameter("Komi", entity.Komi);
             cmd.AddParameter("Handicap", entity.Handicap);
@@ -52,6 +52,7 @@ namespace GoReal.Dal.Repository
         public bool Update(int id, Game entity)
         {
             Command cmd = new Command("GameUpdate", true);
+            cmd.AddParameter("EndDate", entity.EndDate);
             cmd.AddParameter("GameId", id);
             cmd.AddParameter("Result", entity.Result);
             cmd.AddParameter("BlackCapture", entity.BlackCapture);

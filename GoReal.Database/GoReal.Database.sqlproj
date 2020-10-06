@@ -101,6 +101,9 @@
     <Build Include="Procedures\User\UserGet.sql" />
     <Build Include="Procedures\Game\GameUpdate.sql" />
     <Build Include="Procedures\User\UserUpdatePassword.sql" />
+    <Build Include="Procedures\Game\GetPlayTime.sql" />
+    <Build Include="Procedures\Game\GetGameNumber.sql" />
+    <Build Include="Procedures\Game\GetVictoryRatio.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

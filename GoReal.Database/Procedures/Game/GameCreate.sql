@@ -8,6 +8,6 @@
 	@WhitePlayerId INT
 AS
 BEGIN
-	INSERT INTO [Game] ([Date], [BlackRank], [WhiteRank], [Size], [Komi], [Handicap], [TimeControlId], [RuleId], [BlackPlayerId], [WhitePlayerId])
-		VALUES (GETDATE(), dbo.GetPlayerRanking(@BlackPlayerId),dbo.GetPlayerRanking(@WhitePlayerId), @Size, @Komi, @Handicap, @TimeControlId, @RuleId, @BlackPlayerId, @WhitePlayerId)
+	INSERT INTO [Game] ([StartDate], [BlackRank], [WhiteRank], [Size], [Komi], [Handicap], [TimeControlId], [RuleId], [BlackPlayerId], [WhitePlayerId])
+		VALUES (GETDATE(), dbo.GetPlayerRanking(@BlackPlayerId), dbo.GetPlayerRanking(@WhitePlayerId), @Size, @Komi, @Handicap, @TimeControlId, @RuleId, @BlackPlayerId, @WhitePlayerId)
 END

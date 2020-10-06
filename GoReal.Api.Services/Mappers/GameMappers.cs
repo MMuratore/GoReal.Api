@@ -10,7 +10,8 @@ namespace GoReal.Api.Services.Mappers
             return new Game()
             {
                 Id = entity.Id,
-                Date = entity.Date,
+                StartDate = entity.StartDate,
+                EndDate = entity.EndDate,
                 BlackRank = entity.BlackRank,
                 WhiteRank = entity.WhiteRank,
                 Result = entity.Result,
@@ -33,7 +34,8 @@ namespace GoReal.Api.Services.Mappers
             return new D.Game()
             {
                 Id = entity.Id,
-                Date = entity.Date,
+                StartDate = entity.StartDate,
+                EndDate = entity.EndDate,
                 BlackRank = entity.BlackRank,
                 WhiteRank = entity.WhiteRank,
                 Result = entity.Result,

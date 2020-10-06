@@ -6,7 +6,8 @@ namespace GoReal.Api.Models
     public class Game
     {
         public int Id { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
         public int BlackRank { get; set; }
         public int WhiteRank { get; set; }
         public string Result { get; set; }

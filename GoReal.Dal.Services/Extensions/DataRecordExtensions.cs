@@ -35,7 +35,8 @@ namespace GoReal.Dal.Repository.Extensions
             return new Game()
             {
                 Id = (int)Dr["GameId"],
-                Date = (DateTime)Dr["Date"],
+                StartDate = (DateTime)Dr["StartDate"],
+                EndDate = Dr["EndDate"] != DBNull.Value ? (DateTime)Dr["EndDate"] : null,
                 BlackRank = (int)Dr["BlackRank"],
                 WhiteRank = (int)Dr["WhiteRank"],
                 Result = Dr["Result"] != DBNull.Value ? (string)Dr["Result"] : null,

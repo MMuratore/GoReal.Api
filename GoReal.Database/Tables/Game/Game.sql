@@ -1,7 +1,8 @@
 ﻿CREATE TABLE [dbo].[Game]
 (
 	[GameId] INT NOT NULL IDENTITY, 
-    [Date] DATETIME2(0) NOT NULL, 
+    [StartDate] DATETIME2(0) NOT NULL, 
+    [EndDate] DATETIME2(0) NULL, 
     [BlackRank] INT NOT NULL, 
     [WhiteRank] INT NOT NULL, 
     [Result] NVARCHAR(10) NULL, 
@@ -23,5 +24,6 @@
     CONSTRAINT [FK_Game_UserBlack] FOREIGN KEY ([BlackPlayerId]) REFERENCES [User] ([UserId]),
     CONSTRAINT [FK_Game_UserWhite] FOREIGN KEY ([WhitePlayerId]) REFERENCES [User] ([UserId]),
     CONSTRAINT [CK_Game_Size] CHECK ([Size]=9 OR [Size]=13 OR [Size]=19),
+    CONSTRAINT [CK_Game_EndDate] CHECK ([EndDate] IS NOT NULL OR [EndDate] >= [StartDate])
 --    CONSTRAINT [CK_Game_Result] CHECK ([Result] LIKE '[BW][+]([R]|([0-9]([.][5])?))$')
 )
