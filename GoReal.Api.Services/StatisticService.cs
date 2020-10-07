@@ -28,7 +28,7 @@ namespace GoReal.Api.Services
             Statistic statistic = _statisticRepository.Get(userId).ToClient();
 
             if (statistic is null)
-                throw new StatisticException(StatisticResult.NotFound, HttpStatusCode.NotFound, "User do not exist");
+                throw new CommonException(CommonResult.NotFound, HttpStatusCode.NotFound, "User do not exist");
 
             return statistic;
         }

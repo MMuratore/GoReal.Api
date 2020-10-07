@@ -29,10 +29,15 @@ namespace GoReal.Dal.Repository
             }
             catch (SqlException e)
             {
-                throw new StatisticException("user not found");
+                throw new CommonException("user not found");
             }
 
             return statistic;
+        }
+
+        public IEnumerable<Statistic> Get()
+        {
+            throw new System.NotImplementedException();
         }
 
         public bool Create(Statistic entity)

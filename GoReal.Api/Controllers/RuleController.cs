@@ -1,11 +1,11 @@
-﻿using D = GoReal.Dal.Entities;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using GoReal.Api.Infrastrucutre;
 using Microsoft.AspNetCore.Cors;
-using GoReal.Api.Services;
-using GoReal.Api.Models;
 using GoReal.Common.Exceptions;
+using GoReal.Dal.Entities;
+using GoReal.Api.Services;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GoReal.Api.Controllers
 {
@@ -13,30 +13,29 @@ namespace GoReal.Api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [AuthRequired]
-    public class StatisticController : ControllerBase
+    public class RuleController : ControllerBase
     {
-        private readonly StatisticService _statisticService;
+        private readonly RuleService _ruleService;
 
-        public StatisticController(StatisticService StatisticService)
+        public RuleController(RuleService RuleService)
         {
-            _statisticService = StatisticService;
+            _ruleService = RuleService;
         }
 
         [HttpGet]
-        public IActionResult Get([FromQuery] int userId)
+        public IActionResult Get()
         {
-            _ = new Statistic();
-            Statistic statistic;
-
+            _ = new List<Rule>();
+            List<Rule> rules;
             try
             {
-                statistic = _statisticService.Get(userId);
+                rules = _ruleService.Get().ToList();
             }
             catch (CommonException exception)
             {
                 return Problem(exception.Result.ToString(), statusCode: (int)exception.HttpStatusCode, type: ((int)exception.Result).ToString());
             }
-            return Ok(statistic);
+            return Ok(rules);
         }
     }
 }

@@ -34,6 +34,11 @@ namespace GoReal.Dal.Repository
             return _connection.ExecuteReader(cmd, (dr) => dr.ToGame()).SingleOrDefault();
         }
 
+        public IEnumerable<Game> Get()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public bool Create(Game entity)
         {
             Command cmd = new Command("GameCreate", true);

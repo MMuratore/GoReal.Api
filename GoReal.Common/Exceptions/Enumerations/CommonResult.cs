@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GoReal.Common.Exceptions.Enumerations
 {
-    public enum StatisticResult
+    public enum CommonResult
     {
         NotFound
     }

@@ -4,6 +4,7 @@ using GoReal.Common.Interfaces;
 using System;
 using System.Linq;
 using Tools.Databases;
+using System.Collections.Generic;
 
 namespace GoReal.Dal.Repository
 {
@@ -18,11 +19,17 @@ namespace GoReal.Dal.Repository
 
         public TimeControl Get(int id)
         {
-            User user = new User();
             Command cmd = new Command("SELECT * FROM [TimeControl] WHERE TimeControlId = @Id");
             cmd.AddParameter("Id", id);
 
             return _connection.ExecuteReader(cmd, (dr) => dr.ToTimeControl()).SingleOrDefault();
+        }
+
+        public IEnumerable<TimeControl> Get()
+        {
+            Command cmd = new Command("SELECT * FROM [TimeControl]");
+
+            return _connection.ExecuteReader(cmd, (dr) => dr.ToTimeControl());
         }
 
         public bool Create(TimeControl entity)

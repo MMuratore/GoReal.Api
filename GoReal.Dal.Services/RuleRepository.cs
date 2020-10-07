@@ -18,11 +18,17 @@ namespace GoReal.Dal.Repository
 
         public Rule Get(int id)
         {
-            User user = new User();
             Command cmd = new Command("SELECT * FROM [Rule] WHERE RuleId = @Id");
             cmd.AddParameter("Id", id);
 
             return _connection.ExecuteReader(cmd, (dr) => dr.ToRule()).SingleOrDefault();
+        }
+
+        public IEnumerable<Rule> Get()
+        {
+            Command cmd = new Command("SELECT * FROM [Rule]");
+
+            return _connection.ExecuteReader(cmd, (dr) => dr.ToRule());
         }
 
         public bool Create(Rule entity)
@@ -34,11 +40,6 @@ namespace GoReal.Dal.Repository
         }
 
         public bool Update(int id, Rule entity)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public IEnumerable<Rule> Get()
         {
             throw new System.NotImplementedException();
         }
