@@ -8,6 +8,7 @@ namespace GoReal.Api.Models
     {
         public int UserId { get; set; }
         public int GameNumber { get; set; }
+        public int TrainingNumber { get; set; }
         public decimal VictoryRatio { get; set; }
         public int PlayTime { get; set; }
     }

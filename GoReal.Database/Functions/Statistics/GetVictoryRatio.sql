@@ -9,6 +9,8 @@ BEGIN
 	SET @GameNumber = (SELECT COUNT(GameId) FROM [Game] WHERE ([BlackPlayerId] = @UserId OR [WhitePlayerId] = @UserId) AND [WhitePlayerId] != [BlackPlayerId] AND [Result] IS NOT NULL)
 	SET @Victory = (SELECT COUNT(GameId) FROM [Game] WHERE (([BlackPlayerId] = @UserId AND [Result] LIKE 'B%') OR ([WhitePlayerId] = @UserId AND [Result] LIKE 'W%'))
 			AND [WhitePlayerId] != [BlackPlayerId] AND [Result] IS NOT NULL)
-
-	RETURN @Victory/CAST(@GameNumber AS DECIMAL (9,2))
+	
+	IF( @GameNumber = 0)
+		RETURN 0;
+	RETURN @Victory/CAST(@GameNumber AS DECIMAL (9,2));
 END

@@ -19,7 +19,7 @@ namespace GoReal.Dal.Repository
         public IEnumerable<Game> GetByUserId(int userId)
         {
             User user = new User();
-            Command cmd = new Command("SELECT * FROM [Game] WHERE [BlackPlayerId] = @userId OR [WhitePlayerId] = @userId");
+            Command cmd = new Command("SELECT * FROM [Game] WHERE [BlackPlayerId] = @userId OR [WhitePlayerId] = @userId ORDER BY [StartDate] DESC");
             cmd.AddParameter("userId", userId);
 
             return _connection.ExecuteReader(cmd, (dr) => dr.ToGame());
@@ -42,7 +42,6 @@ namespace GoReal.Dal.Repository
         public bool Create(Game entity)
         {
             Command cmd = new Command("GameCreate", true);
-            cmd.AddParameter("StartDate", entity.StartDate);
             cmd.AddParameter("Size", entity.Size);
             cmd.AddParameter("Komi", entity.Komi);
             cmd.AddParameter("Handicap", entity.Handicap);

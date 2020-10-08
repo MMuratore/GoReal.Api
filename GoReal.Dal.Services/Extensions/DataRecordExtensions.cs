@@ -87,6 +87,7 @@ namespace GoReal.Dal.Repository.Extensions
             {
                 UserId = (int)Dr["UserId"],
                 GameNumber = (int)Dr["GameNumber"],
+                TrainingNumber = (int)Dr["TrainingNumber"],
                 VictoryRatio = (decimal)Dr["VictoryRatio"],
                 PlayTime = (int)Dr["PlayTime"]
             };

@@ -10,6 +10,7 @@ namespace GoReal.Api.Services.Mappers
             return new Statistic() { 
                 UserId = entity.UserId,
                 GameNumber = entity.GameNumber,
+                TrainingNumber = entity.TrainingNumber,
                 VictoryRatio = entity.VictoryRatio,
                 PlayTime = entity.PlayTime
             };

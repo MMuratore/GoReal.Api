@@ -107,6 +107,7 @@
     <Build Include="Functions\Statistics\GetGameNumber.sql" />
     <Build Include="Functions\Statistics\GetPlayTime.sql" />
     <Build Include="Functions\Statistics\GetVictoryRatio.sql" />
+    <Build Include="Functions\Statistics\GetTrainingNumber.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
