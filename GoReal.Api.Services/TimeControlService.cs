@@ -20,9 +20,9 @@ namespace GoReal.Api.Services
             _timeControlRepository = new TimeControlRepository(connection);
         }
 
-        public bool Create(TimeControl entity)
+        public TimeControl Create(TimeControl entity)
         {
-            throw new System.NotImplementedException();
+            return _timeControlRepository.Create(entity);
         }
 
         public bool Delete(int id)

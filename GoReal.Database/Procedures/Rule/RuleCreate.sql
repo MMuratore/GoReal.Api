@@ -6,4 +6,5 @@
 AS
 BEGIN
 	INSERT INTO [Rule] VALUES (@RuleName, @Overwrite, @Suicide, @Ko)
+	SELECT * FROM [Rule] WHERE [RuleId] = CAST(SCOPE_IDENTITY() AS INT)
 END

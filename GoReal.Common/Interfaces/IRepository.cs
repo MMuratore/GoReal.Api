@@ -6,7 +6,7 @@ namespace GoReal.Common.Interfaces
     {
         IEnumerable<TEntity> Get();
         TEntity Get(int id);
-        bool Create(TEntity entity);
+        TEntity Create(TEntity entity);
         bool Update(int id, TEntity entity);
         bool Delete(int id);
     }

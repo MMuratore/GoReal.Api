@@ -16,7 +16,7 @@ namespace GoReal.Api.Models.Helpers
             {
                 foreach (Stone stone in stones)
                 {
-                    map[stone.Column][stone.Row] = stone.Color;
+                    map[stone.Row][stone.Column] = stone.Color;
                 }
             }
             

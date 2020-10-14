@@ -39,7 +39,7 @@ namespace GoReal.Dal.Repository
             throw new System.NotImplementedException();
         }
 
-        public bool Create(Game entity)
+        public Game Create(Game entity)
         {
             Command cmd = new Command("GameCreate", true);
             cmd.AddParameter("Size", entity.Size);
@@ -50,7 +50,7 @@ namespace GoReal.Dal.Repository
             cmd.AddParameter("BlackPlayerId", entity.BlackPlayerId);
             cmd.AddParameter("WhitePlayerId", entity.WhitePlayerId);
 
-            return _connection.ExecuteNonQuery(cmd) == 1;
+            return _connection.ExecuteReader(cmd, (dr) => dr.ToGame()).SingleOrDefault();
         }
 
         public bool Update(int id, Game entity)

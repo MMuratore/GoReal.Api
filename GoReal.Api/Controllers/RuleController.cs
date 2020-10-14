@@ -37,5 +37,23 @@ namespace GoReal.Api.Controllers
             }
             return Ok(rules);
         }
+
+        [HttpPut]
+        public IActionResult Put([FromBody] Rule rule)
+        {
+            _ = new Rule();
+            Rule newRule;
+            try
+            {
+                newRule = _ruleService.Create(rule);
+            }
+            catch (CommonException exception)
+            {
+                return Problem(exception.Result.ToString(), statusCode: (int)exception.HttpStatusCode, type: ((int)exception.Result).ToString());
+
+            }
+
+            return Ok(newRule);
+        }
     }
 }

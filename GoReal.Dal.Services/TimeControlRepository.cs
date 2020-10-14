@@ -32,7 +32,7 @@ namespace GoReal.Dal.Repository
             return _connection.ExecuteReader(cmd, (dr) => dr.ToTimeControl());
         }
 
-        public bool Create(TimeControl entity)
+        public TimeControl Create(TimeControl entity)
         {
             Command cmd = new Command("GameCreate", true);
             cmd.AddParameter("Speed", entity.Speed);
@@ -42,7 +42,7 @@ namespace GoReal.Dal.Repository
             cmd.AddParameter("Period", entity.Period);
             cmd.AddParameter("InitialTime", entity.InitialTime);
 
-            return _connection.ExecuteNonQuery(cmd) == 1;
+            return _connection.ExecuteReader(cmd, (dr) => dr.ToTimeControl()).SingleOrDefault();
         }
 
         public bool Update(int id, TimeControl entity)

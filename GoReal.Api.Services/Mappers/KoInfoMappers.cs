@@ -24,7 +24,7 @@ namespace GoReal.Api.Services.Mappers
 
         public static string ToDal(this Stone entity)
         {
-            return $"{entity.Row},{entity.Column},{(entity.Color.HasValue ?entity.Color.ToString() : "null")}";
+            return $"{entity.Row},{entity.Column},{(entity.Color.HasValue ?entity.Color.ToString() : "NULL")}";
         }
     }
 }

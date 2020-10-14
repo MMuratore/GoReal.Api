@@ -37,5 +37,23 @@ namespace GoReal.Api.Controllers
             }
             return Ok(timeControls);
         }
+
+        [HttpPut]
+        public IActionResult Put([FromBody] TimeControl timeControl)
+        {
+            _ = new TimeControl();
+            TimeControl newTimeControl;
+            try
+            {
+                newTimeControl = _timeControlService.Create(timeControl);
+            }
+            catch (CommonException exception)
+            {
+                return Problem(exception.Result.ToString(), statusCode: (int)exception.HttpStatusCode, type: ((int)exception.Result).ToString());
+
+            }
+
+            return Ok(newTimeControl);
+        }
     }
 }

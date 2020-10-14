@@ -18,7 +18,7 @@ namespace GoReal.Api.Models
         public int WhiteCapture { get; set; }
         public bool? BlackState { get; set; }
         public bool? WhiteState { get; set; }
-        public string KoInfo { get; set; }
+        public D.Stone KoInfo { get; set; }
         public D.TimeControl TimeControl { get; set; }
         public D.Rule Rule { get; set; }
         public User BlackPlayer { get; set; }

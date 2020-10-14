@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using GoReal.Api.Models.Helpers;
 using GoReal.Common.Exceptions;
 using GoReal.Common.Exceptions.Enumerations;
@@ -41,13 +42,13 @@ namespace GoReal.Api.Models
             Board move = Clone();
 
             if (!Has(stone))
-                throw new GameException(GameResult.PointNotExist, "Point do not exist");
+                throw new GameException(GameResult.PointNotExist, HttpStatusCode.BadRequest, "Point do not exist");
 
             if (preventOverwrite && !(Get(stone) is null))
-                throw new GameException(GameResult.PreventOverwrite, "Prevent Overwrite");
+                throw new GameException(GameResult.PreventOverwrite, HttpStatusCode.BadRequest, "Prevent Overwrite");
 
             if (preventKo && KoInfo.Color == stone.Color && VertexEquals(KoInfo, stone))
-                throw new GameException(GameResult.PreventKo, "Prevent Ko");
+                throw new GameException(GameResult.PreventKo, HttpStatusCode.BadRequest, "Prevent Ko");
 
             move = Set(move, stone);
 
@@ -88,53 +89,64 @@ namespace GoReal.Api.Models
             if (deadStones.Count() == 0 && liberties.Count() == 0)
             {
                 if (preventSuicide)
-                    throw new GameException(GameResult.PreventSuicide, "Prevent Suicide");
+                    throw new GameException(GameResult.PreventSuicide, HttpStatusCode.BadRequest, "Prevent Suicide");
 
+                bool? color = stone.Color;
                 foreach (Stone suicide in move.GetChain(stone))
                 {
                     suicide.Color = null;
-                    move = Set(move, suicide).SetCaptures(Player.First(x => x.Value == !stone.Color).Key, x => x + 1);
+                    move = Set(move, suicide).SetCaptures(Player.First(x => x.Value == !color).Key, x => x + 1);
                 }
             }
 
             return move;
         }
-        /*
+        
         public List<Stone> GetHandicapPlacement(int count, bool tygem = false)
         {
             if (Math.Min(Width, Height) <= 6 || count < 2) return null;
 
-            Stone near = new Stone(Width > 13 ? 3 : 2, Height > 13 ? 3 : 2);
-            Stone far = new Stone(Width - near.Row - 1, Height - near.Column - 1);
-            Stone middle = new Stone((Width - 1) / 2, (Height - 1) / 2);
+            Stone near = new Stone() { Row = Width > 13 ? 3 : 2, Column = Height > 13 ? 3 : 2, Color = false };
+            Stone far = new Stone() { Row = Width - near.Row - 1, Column = Height - near.Column - 1, Color = false };
+            Stone middle = new Stone() { Row = (Width - 1) / 2, Column = (Height - 1) / 2, Color = false };
 
-            List<Stone> result = !tygem ? new List<Stone>() { new Stone(near.Row, far.Column), new Stone(far.Row, near.Column), new Stone(far.Row, far.Column), new Stone(near.Row, near.Column) }
-            : new List<Stone>() { new Stone(near.Row, far.Column), new Stone(far.Row, near.Column), new Stone(near.Row, near.Column), new Stone(far.Row, far.Column) };
+            List<Stone> result = !tygem ? new List<Stone>() {
+                new Stone() { Row = near.Row, Column = far.Column, Color = false },
+                new Stone() { Row = far.Row, Column = near.Column, Color = false },
+                new Stone() { Row = far.Row, Column = far.Column, Color = false },
+                new Stone() { Row = near.Row, Column = near.Column, Color = false }
+            }
+            : new List<Stone>() {
+                new Stone() { Row = near.Row, Column = far.Column, Color = false },
+                new Stone() { Row = far.Row, Column = near.Column, Color = false },
+                new Stone() { Row = near.Row, Column = near.Column, Color = false },
+                new Stone() { Row = far.Row, Column = far.Column, Color = false }
+            };
 
             if (Width % 2 != 0 && Height % 2 != 0 && Width != 7 && Height != 7)
             {
                 if (count == 5) result.Add(middle);
-                result.Add(new Stone(near.Row, middle.Column));
-                result.Add(new Stone(far.Row, middle.Column));
+                result.Add(new Stone() { Row = near.Row, Column = middle.Column, Color = false });
+                result.Add(new Stone() { Row = far.Row, Column = middle.Column, Color = false });
                 if (count == 7) result.Add(middle);
-                result.Add(new Stone(middle.Row, near.Column));
-                result.Add(new Stone(middle.Row, far.Column));
+                result.Add(new Stone() { Row = middle.Row, Column = near.Column, Color = false });
+                result.Add(new Stone() { Row = middle.Row, Column = far.Column, Color = false });
                 result.Add(middle);
             }
             else if (Width % 2 != 0 && Width != 7)
             {
-                result.Add(new Stone(middle.Row, near.Column));
-                result.Add(new Stone(middle.Row, far.Column));
+                result.Add(new Stone() { Row = middle.Row, Column = near.Column, Color = false });
+                result.Add(new Stone() { Row = middle.Row, Column = far.Column, Color = false });
             }
             else if (Height % 2 != 0 && Height != 7)
             {
-                result.Add(new Stone(near.Row, middle.Column));
-                result.Add(new Stone(far.Row, middle.Column));
+                result.Add(new Stone() { Row = near.Row, Column = middle.Column, Color = false });
+                result.Add(new Stone() { Row = far.Row, Column = middle.Column, Color = false });
             }
 
             return result.GetRange(0, count);
         }
-        */
+        
         public Board Clear()
         {
             Array.Clear(StoneMap, 0, StoneMap.Length);
@@ -197,14 +209,14 @@ namespace GoReal.Api.Models
 
         private bool? Get(Stone stone)
         {
-            return StoneMap[stone.Column]?[stone.Row];
+            return StoneMap[stone.Row]?[stone.Column];
         }
 
         private Board Set(Board board, Stone stone)
         {
             if (board.Has(stone))
             {
-                board.StoneMap[stone.Column][stone.Row] = stone.Color;
+                board.StoneMap[stone.Row][stone.Column] = stone.Color;
             }
 
             return board;

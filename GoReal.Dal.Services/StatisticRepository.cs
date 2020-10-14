@@ -40,7 +40,7 @@ namespace GoReal.Dal.Repository
             throw new System.NotImplementedException();
         }
 
-        public bool Create(Statistic entity)
+        public Statistic Create(Statistic entity)
         {
             throw new System.NotImplementedException();
         }

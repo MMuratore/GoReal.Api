@@ -8,4 +8,5 @@
 AS
 BEGIN
 	INSERT INTO [TimeControl] VALUES (@Speed, @OverTime, @TimeLimit, @TimePerPeriod, @Period, @InitalTime)
+	SELECT * FROM [TimeControl] WHERE [TimeControlId] = CAST(SCOPE_IDENTITY() AS INT)
 END

@@ -14,7 +14,7 @@
     [BlackState] BIT NULL DEFAULT 1,
     [WhiteState] BIT NULL DEFAULT 0,
     [KoInfo] NVARCHAR(30) NULL DEFAULT '-1,-1,null' ,
-    [TimeControlId] INT NOT NULL, 
+    [TimeControlId] INT NULL, 
     [RuleId] INT NOT NULL, 
     [BlackPlayerId] INT NOT NULL, 
     [WhitePlayerId] INT NOT NULL, 

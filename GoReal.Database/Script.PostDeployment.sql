@@ -19,10 +19,13 @@ EXECUTE [dbo].[Register]  @GoTag = 'MuRakSss', @LastName = 'Muratore', @FirstNam
     @Email = 'matthieu.muratore@gmail.com' , @Password = 'Test1234+';
 EXECUTE [dbo].[Register]  @GoTag = 'CasTou', @LastName = 'Hanuise', @FirstName = 'Manon', 
     @Email = 'manonhanuise@gmail.com' , @Password = 'Test1234+';
+EXECUTE [dbo].[Register]  @GoTag = 'Solar', @LastName = 'Muratore', @FirstName = 'Valentin', 
+    @Email = 'valentin.muratore@gmail.com' , @Password = 'Test1234+';
 
 EXECUTE [dbo].[AddRoleToUser]  @GoTag = 'MuRakSss', @RoleName = 'SuperAdministrator';
 
 EXECUTE [dbo].[RuleCreate]  @RuleName = 'Japanese', @Overwrite = 1, @Suicide = 1, @Ko = 1;
+EXECUTE [dbo].[RuleCreate]  @RuleName = 'New Zealand', @Overwrite = 1, @Suicide = 0, @Ko = 1;
 
 EXECUTE [dbo].[TimeControlCreate] @Speed = 'Live', @OverTime = 'Byo-Yomi', @TimeLimit = 600,
     @TimePerPeriod = 30, @Period = 5;
@@ -42,16 +45,17 @@ INSERT INTO [Game]
 INSERT INTO [Game]
 		VALUES ('2020-09-04 15:10:00', '2020-09-04 15:50:00', 0, 200, 'B+5', 9, 0, 0, 5, 12, NULL, NULL, '-1,-1,NULL', 1, 1, 1, 2);
 
+
 EXECUTE[dbo].[GameCreate] @Size = 9, @Komi = 0, @Handicap = 0, @TimeControlId = 2,
 		@RuleId = 1, @BlackPlayerId = 2, @WhitePlayerId = 1;
 
 UPDATE [Game] SET [EndDate] = (SELECT DATEADD(MI,20,GETDATE())), [Result] = 'B+3', [BlackState] = NULL,  [WhiteState] = NULL WHERE [GameId] = 5
 
-EXECUTE [dbo].[AddStone] @GameId = 3, @Row = 1, @Column = 0, @Color = 0;
-EXECUTE [dbo].[AddStone] @GameId = 3, @Row = 0, @Column = 1, @Color = 0;
-EXECUTE [dbo].[AddStone] @GameId = 3, @Row = 1, @Column = 2, @Color = 0;
+EXECUTE [dbo].[AddStone] @GameId = 1, @Row = 1, @Column = 0, @Color = 0;
+EXECUTE [dbo].[AddStone] @GameId = 1, @Row = 0, @Column = 1, @Color = 0;
+EXECUTE [dbo].[AddStone] @GameId = 1, @Row = 1, @Column = 2, @Color = 0;
 
-EXECUTE [dbo].[AddStone] @GameId = 3, @Row = 2, @Column = 0, @Color = 1;
-EXECUTE [dbo].[AddStone] @GameId = 3, @Row = 1, @Column = 1, @Color = 1;
-EXECUTE [dbo].[AddStone] @GameId = 3, @Row = 3, @Column = 1, @Color = 1;
-EXECUTE [dbo].[AddStone] @GameId = 3, @Row = 2, @Column = 2, @Color = 1;
+EXECUTE [dbo].[AddStone] @GameId = 1, @Row = 2, @Column = 0, @Color = 1;
+EXECUTE [dbo].[AddStone] @GameId = 1, @Row = 1, @Column = 1, @Color = 1;
+EXECUTE [dbo].[AddStone] @GameId = 1, @Row = 3, @Column = 1, @Color = 1;
+EXECUTE [dbo].[AddStone] @GameId = 1, @Row = 2, @Column = 2, @Color = 1;

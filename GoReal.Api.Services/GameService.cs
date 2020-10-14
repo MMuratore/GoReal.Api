@@ -61,7 +61,7 @@ namespace GoReal.Api.Services
 
             List<D.Stone> stones = _stoneRepository.Get(id).ToList();
 
-            Board board = new Board(stones, game.Size, game.Size, game.BlackPlayer, game.WhitePlayer, game.BlackCapture, game.WhiteCapture, game.KoInfo.ToStone());
+            Board board = new Board(stones, game.Size, game.Size, game.BlackPlayer, game.WhitePlayer, game.BlackCapture, game.WhiteCapture, game.KoInfo);
 
             if (!board.IsValid())
                 throw new GameException(GameResult.BoardNotValid, HttpStatusCode.BadRequest, "Board not valid");
@@ -73,9 +73,30 @@ namespace GoReal.Api.Services
             return game;
         }
 
-        public bool Create(Game entity)
+        public Game Create(Game entity)
         {
-            return _gameRepository.Create(entity.ToDal());
+
+            Game newGame = _gameRepository.Create(entity.ToDal()).ToClient();
+
+            Board board = new Board(null, newGame.Size, newGame.Size, newGame.BlackPlayer, newGame.WhitePlayer, newGame.BlackCapture, newGame.WhiteCapture, newGame.KoInfo);
+            List<D.Stone> handicaps = board.GetHandicapPlacement(entity.Handicap);
+
+            if(handicaps != null)
+            {
+                foreach (D.Stone handicap in handicaps)
+                {
+                    board = board.MakeMove(handicap);
+                }
+            }
+
+            if (!board.IsValid())
+                throw new GameException(GameResult.BoardNotValid, HttpStatusCode.BadRequest, "Board not valid");
+
+            board.SetCaptures(newGame.BlackPlayer, newGame.BlackCapture);
+            board.SetCaptures(newGame.WhitePlayer, newGame.WhiteCapture);
+            newGame.Board = board;
+
+            return newGame;
         }
 
         public MoveResult MakeMove(int gameId, D.Stone newStone)
@@ -92,14 +113,14 @@ namespace GoReal.Api.Services
 
             result.BlackCapture = game.BlackCapture;
             result.WhiteCapture = game.WhiteCapture;
-            result.KoInfo = game.KoInfo.ToStone();
+            result.KoInfo = game.KoInfo;
 
             if (newStone.Color is true && game.WhiteState != true || newStone.Color is false && game.BlackState != true)
                 throw new GameException(GameResult.OtherPlayerTurn, HttpStatusCode.BadRequest, "Not your turn");
 
             game.Rule = _ruleRepository.Get(game.Rule.Id);
             List<D.Stone> stones = _stoneRepository.Get(gameId).ToList();
-            Board board = new Board(stones, game.Size, game.Size, game.BlackPlayer, game.WhitePlayer, game.BlackCapture, game.WhiteCapture, game.KoInfo.ToStone());
+            Board board = new Board(stones, game.Size, game.Size, game.BlackPlayer, game.WhitePlayer, game.BlackCapture, game.WhiteCapture, game.KoInfo);
 
             if (!board.IsValid())
                 throw new GameException(GameResult.BoardNotValid, HttpStatusCode.BadRequest, "Board not valid");
@@ -124,7 +145,7 @@ namespace GoReal.Api.Services
             game.WhiteCapture = move.GetCaptures(game.WhitePlayer);
             game.BlackState = result.BlackState;
             game.WhiteState = result.WhiteState;
-            game.KoInfo = move.KoInfo.ToDal();
+            game.KoInfo = move.KoInfo;
 
             _gameRepository.Update(gameId, game.ToDal());
 
@@ -144,7 +165,7 @@ namespace GoReal.Api.Services
 
             result.BlackCapture = game.BlackCapture;
             result.WhiteCapture = game.WhiteCapture;
-            result.KoInfo = game.KoInfo.ToStone();
+            result.KoInfo = game.KoInfo;
 
             result = ModifyPlayerState(result, game, userId);
 
@@ -170,9 +191,13 @@ namespace GoReal.Api.Services
 
             result.BlackCapture = game.BlackCapture;
             result.WhiteCapture = game.WhiteCapture;
-            result.KoInfo = game.KoInfo.ToStone();
+            result.KoInfo = game.KoInfo;
 
-            if (game.BlackPlayer.UserId == userId)
+            if (game.BlackPlayer.UserId == userId && game.WhitePlayer.UserId == userId)
+            {
+                result.Result = "P+O";
+            }
+            else if (game.BlackPlayer.UserId == userId)
             {
                 if (!(game.BlackState == true))
                     throw new GameException(GameResult.OtherPlayerTurn, HttpStatusCode.BadRequest, "Not your turn");
@@ -198,7 +223,24 @@ namespace GoReal.Api.Services
 
         private MoveResult ModifyPlayerState(MoveResult result, Game game, int userId)
         {
-            if (game.BlackPlayer.UserId == userId)
+            if (game.BlackPlayer.UserId == userId && game.WhitePlayer.UserId == userId)
+            {
+                if (game.BlackState == true)
+                    game.BlackState = null;
+                if (game.WhiteState == true)
+                    game.WhiteState = null;
+
+                if (game.BlackState == null && game.WhiteState == null)
+                {
+                    result.Result = "P+O";
+                }
+                else
+                {
+                    result.BlackState = game.BlackState is null ? null : !game.BlackState;
+                    result.WhiteState = game.WhiteState is null ? null : !game.WhiteState;
+                }
+            }
+            else if (game.BlackPlayer.UserId == userId)
             {
                 if (!(game.BlackState == true))
                     throw new GameException(GameResult.OtherPlayerTurn, HttpStatusCode.BadRequest, "Not your turn");

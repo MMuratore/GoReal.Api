@@ -57,9 +57,17 @@ namespace GoReal.Api.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] Game game)
         {
-            if (!_gameService.Create(game)) return BadRequest();
-
-            return Ok();
+            _ = new Game();
+            Game newGame;
+            try
+            {
+                newGame = _gameService.Create(game);
+            }
+            catch (GameException exception)
+            {
+                return Problem(exception.Result.ToString(), statusCode: (int)exception.HttpStatusCode, type: ((int)exception.Result).ToString());
+            }
+            return Ok(newGame);
         }
 
         [HttpPut("{id}")]
@@ -79,7 +87,7 @@ namespace GoReal.Api.Controllers
         }
 
         [HttpPut]
-        [Route("pass/{id}")]
+        [Route("{id}/pass")]
         public IActionResult Pass(int id, [FromQuery] int userId)
         {
             _ = new MoveResult();
@@ -96,7 +104,7 @@ namespace GoReal.Api.Controllers
         }
 
         [HttpPut]
-        [Route("resign/{id}")]
+        [Route("{id}/resign")]
         public IActionResult Resign(int id, [FromQuery] int userId)
         {
             _ = new MoveResult();

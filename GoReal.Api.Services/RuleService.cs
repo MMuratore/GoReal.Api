@@ -20,9 +20,9 @@ namespace GoReal.Api.Services
             _ruleRepository = new RuleRepository(connection);
         }
 
-        public bool Create(Rule entity)
+        public Rule Create(Rule entity)
         {
-            throw new System.NotImplementedException();
+            return _ruleRepository.Create(entity);  
         }
 
         public bool Delete(int id)

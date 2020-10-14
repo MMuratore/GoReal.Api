@@ -31,12 +31,15 @@ namespace GoReal.Dal.Repository
             return _connection.ExecuteReader(cmd, (dr) => dr.ToRule());
         }
 
-        public bool Create(Rule entity)
+        public Rule Create(Rule entity)
         {
             Command cmd = new Command("RuleCreate", true);
             cmd.AddParameter("RuleName", entity.RuleName);
+            cmd.AddParameter("Overwrite", entity.Overwrite);
+            cmd.AddParameter("Suicide", entity.Suicide);
+            cmd.AddParameter("Ko", entity.Ko);
 
-            return _connection.ExecuteNonQuery(cmd) == 1;
+            return _connection.ExecuteReader(cmd, (dr) => dr.ToRule()).SingleOrDefault();
         }
 
         public bool Update(int id, Rule entity)
