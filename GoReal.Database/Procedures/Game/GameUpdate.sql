@@ -1,6 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[GameUpdate]
 	@GameId INT,
-	@EndDate DATETIME2,
 	@Result NVARCHAR(10),
 	@BlackCapture INT, 
 	@WhiteCapture INT,
@@ -9,8 +8,7 @@
     @KoInfo NVARCHAR(30)
 AS
 BEGIN
-	UPDATE [Game] SET  
-		[EndDate] = @EndDate,
+UPDATE [Game] SET  
 		[Result] = @Result, 
 		[BlackCapture] = @BlackCapture,  
 		[WhiteCapture] = @WhiteCapture, 
@@ -18,4 +16,8 @@ BEGIN
 		[WhiteState] = @WhiteState, 
 		[KoInfo] = @KoInfo
 	WHERE [GameId] = @GameId
+IF (@Result IS NOT NULL OR @Result != '')
+BEGIN
+	UPDATE [Game] SET [EndDate] = GETDATE() WHERE [GameId] = @GameId
+END
 END

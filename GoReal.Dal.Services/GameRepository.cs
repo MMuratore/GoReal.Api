@@ -56,7 +56,6 @@ namespace GoReal.Dal.Repository
         public bool Update(int id, Game entity)
         {
             Command cmd = new Command("GameUpdate", true);
-            cmd.AddParameter("EndDate", entity.EndDate);
             cmd.AddParameter("GameId", id);
             cmd.AddParameter("Result", entity.Result);
             cmd.AddParameter("BlackCapture", entity.BlackCapture);
@@ -65,7 +64,7 @@ namespace GoReal.Dal.Repository
             cmd.AddParameter("WhiteState", entity.WhiteState);
             cmd.AddParameter("KoInfo", entity.KoInfo);
 
-            return _connection.ExecuteNonQuery(cmd) == 1;
+            return _connection.ExecuteNonQuery(cmd) <= 1;
         }
 
         public bool Delete(int id)
